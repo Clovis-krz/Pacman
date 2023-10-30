@@ -19,5 +19,8 @@ jobs:
       with:
         java-version: '21'  # Change this to your desired Java version
 
-    - name: Build with Maven
-      run: mvn clean install -B -V
+    - name: Compile Java Source Files
+      run: |
+        javac -d ./build src/com/pacman/*.java
+        javac -cp "./lib/*:./build" -d ./build src/com/pacman/*.java
+
