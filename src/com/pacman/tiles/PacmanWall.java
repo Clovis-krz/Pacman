@@ -1,10 +1,14 @@
+package com.pacman.tiles;
+
 public class PacmanWall implements Tile{
     final int x;
     final int y;
+
     public PacmanWall(int x, int y) {
         this.x = x;
         this.y = y;
     }
+
     @Override
     public boolean isSolidForPacman() {
         return true;
@@ -16,20 +20,16 @@ public class PacmanWall implements Tile{
     }
 
     @Override
-    public void onPacmanInterract() {
-
-    }
+    public void onPacmanInterract() {}
 
     @Override
     public int getX() {
-        int temp_x = this.x;
-        return temp_x;
+	    return this.x;
     }
 
     @Override
     public int getY() {
-        int temp_y = this.y;
-        return temp_y;
+	    return this.y;
     }
 }
 /*

@@ -1,7 +1,9 @@
-public class PurplePacball implements Tile{
+package com.pacman.tiles;
+
+public class OrangePacball implements Tile{
     final int x;
     final int y;
-    public PurplePacball(int x, int y) {
+    public OrangePacball(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -15,31 +17,28 @@ public class PurplePacball implements Tile{
         return false;
     }
 
-    // TODO: increase by 300 game points, pacman become invisible, change pacman color to light yellow
+    // TODO: increase by 500 game points, pacman become SuperPacman and orange, ghosts become blue
     @Override
-    public void onPacmanInterract() {
-
-    }
+    public void onPacmanInterract() {}
 
     @Override
     public int getX() {
-        int temp_x = this.x;
-        return temp_x;
+	    return this.x;
     }
 
     @Override
     public int getY() {
-        int temp_y = this.y;
-        return temp_y;
+	    return this.y;
     }
 }
+
 /*
-|__ PurplePacball
+|__ OrangePacball
         |__ final int x, final int y;
-        |__ PurplePacball(int x, int y);
+        |__ OrangePacball(int x, int y);
         |__ getX() → x
         |__ getY() → Y
         |__ isSolidForPacman() → false
         |__ isSolidForGhosts() → false
-        |__ onPacmanInterract(): effet des pacballs voilettes;
+        |__ onPacmanInterract(): effet des pacballs oranges;
  */
