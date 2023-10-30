@@ -14,10 +14,14 @@ jobs:
     - name: Check Out Repository
       uses: actions/checkout@v2
 
-    - name: Set up JDK 21
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '21'  # Change this to your desired Java version
+        distribution: 'adopt' # You can use other distributions like 'adopt', 'adopt@1.11', 'openjdk', etc.
+        java-version: '21' # Adjust the Java version as needed
+        architecture: 'x64' # Change this if needed
+        job-status: 'success'
+
 
     - name: Compile Java Source Files
       run: |
