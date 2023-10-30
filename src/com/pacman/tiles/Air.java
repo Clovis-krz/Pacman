@@ -1,18 +1,22 @@
-public class Wall implements Tile{
+package com.pacman.tiles;
+
+public class Air implements Tile {
     final int x;
     final int y;
-    public Wall(int x, int y) {
+
+    public Air(int x, int y) {
         this.x = x;
         this.y = y;
     }
+
     @Override
     public boolean isSolidForPacman() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isSolidForGhosts() {
-        return true;
+        return false;
     }
 
     @Override
@@ -22,24 +26,21 @@ public class Wall implements Tile{
 
     @Override
     public int getX() {
-        int temp_x = this.x;
-        return temp_x;
+	    return this.x;
     }
 
     @Override
     public int getY() {
-        int temp_y = this.y;
-        return temp_y;
+	    return this.y;
     }
 }
-
 /*
-|__ Wall
+|__ Air
         |__ final int x, final int y;
-        |__ Wall(int x, int y);
+        |__ Air(int x, int y);
         |__ getX() → x
         |__ getY() → Y
-        |__ isSolidForPacman() → true
-        |__ isSolidForGhosts() → true
+        |__ isSolidForPacman() → false
+        |__ isSolidForGhosts() → false
         |__ onPacmanInterract(): rien;
  */

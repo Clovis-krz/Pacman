@@ -1,3 +1,5 @@
+package com.pacman.tiles;
+
 public interface Tile {
     boolean isSolidForPacman();
 

@@ -1,7 +1,9 @@
-public class GreenPacball implements Tile{
+package com.pacman.tiles;
+
+public class BluePacball implements Tile{
     final int x;
     final int y;
-    public GreenPacball(int x, int y) {
+    public BluePacball(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -15,7 +17,7 @@ public class GreenPacball implements Tile{
         return false;
     }
 
-    // TODO: increase by 1000 game points, change labyrinth structure
+    // TODO: increase by 100 game points
     @Override
     public void onPacmanInterract() {
 
@@ -23,23 +25,21 @@ public class GreenPacball implements Tile{
 
     @Override
     public int getX() {
-        int temp_x = this.x;
-        return temp_x;
+	    return this.x;
     }
 
     @Override
     public int getY() {
-        int temp_y = this.y;
-        return temp_y;
+	    return this.y;
     }
 }
 /*
-|__ GreenPacball
+|__ BluePacball
         |__ final int x, final int y;
-        |__ OrangePacball(int x, int y);
+        |__ BluePacball(int x, int y);
         |__ getX() → x
         |__ getY() → Y
         |__ isSolidForPacman() → false
         |__ isSolidForGhosts() → false
-        |__ onPacmanInterract(): effet des pacballs vertes;
+        |__ onPacmanInterract(): on ajoute les points;
  */
