@@ -25,5 +25,7 @@ jobs:
 
     - name: Compile Java Source Files
       run: |
-        javac -d ./build -cp ./build ./src/**/*.java
+        mkdir -p build
+        find ./src -name "*.java" > sources.txt
+        javac -d ./build -cp ./build @sources.txt
 
