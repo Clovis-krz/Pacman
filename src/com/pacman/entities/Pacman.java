@@ -1,6 +1,7 @@
 package com.pacman.entities;
 
 import com.pacman.Main;
+import com.pacman.renderers.PacmanRenderer;
 import com.pacman.tiles.Tile;
 
 
@@ -13,11 +14,13 @@ public class Pacman implements Entity {
 
 	private State state = State.NORMAL;
 	private Direction direction = Direction.RIGHT;
+	private final PacmanRenderer renderer;
 	private int x, y;
 
 	public Pacman(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.renderer = new PacmanRenderer(this);
 	}
 
 	private static final int SPEED_MULTIPLIER = 2;
@@ -87,5 +90,10 @@ public class Pacman implements Entity {
 
 		// TODO: Adapt call depending on codebase changes
 		if (tileX != nextTileX || tileY != nextTileY) nextTile.onPacmanInterract();
+	}
+	
+	@Override
+	public void draw() {
+		renderer.repaint();
 	}
 }

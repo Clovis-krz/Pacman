@@ -5,7 +5,7 @@ import com.pacman.tiles.PacmanWall;
 import javax.swing.*;
 
 public class PacmanWallRenderer extends JComponent {
-    final PacmanWall pacmanWall;
+    private final PacmanWall pacmanWall;
     public PacmanWallRenderer(PacmanWall pacmanWall) {
         this.pacmanWall = pacmanWall;
     }
