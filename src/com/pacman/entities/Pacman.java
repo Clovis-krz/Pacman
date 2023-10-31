@@ -1,5 +1,9 @@
 package com.pacman.entities;
 
+import com.pacman.Main;
+import com.pacman.tiles.Tile;
+
+
 public class Pacman implements Entity {
 	public enum State {
 		NORMAL,
@@ -7,10 +11,16 @@ public class Pacman implements Entity {
 		SUPER
 	}
 
-	private State state;
+	private State state = State.NORMAL;
+	private Direction direction = Direction.RIGHT;
 	private int x, y;
-	private int tileX, tileY;
-	private Direction direction;
+
+	public Pacman(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	private static final int SPEED_MULTIPLIER = 2;
 
 	@Override
 	public int getX() {
@@ -20,16 +30,6 @@ public class Pacman implements Entity {
 	@Override
 	public int getY() {
 		return this.y;
-	}
-
-	@Override
-	public int getTileX() {
-		return this.tileX;
-	}
-
-	@Override
-	public int getTileY() {
-		return this.tileY;
 	}
 
 	@Override
@@ -45,9 +45,47 @@ public class Pacman implements Entity {
 		this.state = state;
 	}
 
-	// TODO: Implement pacman logic (moving, wall checks etc)
 	@Override
 	public void move() {
-	}
+		// Offset coordinates for the current direction we're in.
+		int directionX = direction.getX();
+		int directionY = direction.getY();
 
+		// Current tile coordinates
+		int tileX = Math.floorDiv(this.x, Main.ELEMENT_SIZE);
+		int tileY = Math.floorDiv(this.y, Main.ELEMENT_SIZE);
+
+		// Upcoming x, y coordinates
+		int nextX = this.x + directionX * SPEED_MULTIPLIER;
+		int nextY = this.y + directionY * SPEED_MULTIPLIER;
+
+		// Upcoming tile coordinates
+		int nextTileX = Math.floorDiv(nextX, Main.ELEMENT_SIZE);
+		int nextTileY = Math.floorDiv(nextY, Main.ELEMENT_SIZE);
+
+		// Upcoming tile
+		Tile nextTile = Main.getTileAtCoords(nextTileX, nextTileY);
+
+		// Wraparound mechanics (if the next tile we're going on is outside the board, we wrap around if possible or stop moving otherwise)
+		if (nextTileX < 0 || nextTileX >= Main.getBoardLength() || nextTileY < 0 || nextTileY >= Main.getBoardLength()) {
+			int[] destination = Main.getWrapAroundCoordinates(tileX, tileY);
+
+			if (destination == null) return;
+
+			this.x = destination[0] + directionX * SPEED_MULTIPLIER;
+			this.y = destination[1] + directionY * SPEED_MULTIPLIER;
+
+			return;
+		}
+
+		// If the upcoming tile is a wall, we stop moving
+		if (nextTile == null || nextTile.isSolidForPacman()) return;
+
+		// If there's no obstacle in the way, we go to the next coordinates.
+		this.x = nextX;
+		this.y = nextY;
+
+		// TODO: Adapt call depending on codebase changes
+		if (tileX != nextTileX || tileY != nextTileY) nextTile.onPacmanInterract();
+	}
 }
