@@ -1,12 +1,16 @@
 package com.pacman.tiles;
 
+import com.pacman.renderers.PacmanWallRenderer;
+
 public class PacmanWall implements Tile{
     final int x;
     final int y;
+    final PacmanWallRenderer renderer;
 
     public PacmanWall(int x, int y) {
         this.x = x;
         this.y = y;
+        this.renderer = new PacmanWallRenderer(this);
     }
 
     @Override
@@ -30,6 +34,11 @@ public class PacmanWall implements Tile{
     @Override
     public int getY() {
 	    return this.y;
+    }
+
+    @Override
+    public void draw() {
+        renderer.repaint();
     }
 }
 /*

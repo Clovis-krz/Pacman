@@ -1,12 +1,16 @@
 package com.pacman.tiles;
 
+import com.pacman.renderers.PurplePacballRenderer;
+
 public class PurplePacball implements Tile{
     final int x;
     final int y;
+    final PurplePacballRenderer renderer;
 
     public PurplePacball(int x, int y) {
         this.x = x;
         this.y = y;
+        this.renderer = new PurplePacballRenderer(this);
     }
 
     @Override
@@ -31,6 +35,11 @@ public class PurplePacball implements Tile{
     @Override
     public int getY() {
 	    return this.y;
+    }
+
+    @Override
+    public void draw() {
+        renderer.repaint();
     }
 }
 

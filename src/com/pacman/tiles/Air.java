@@ -1,12 +1,16 @@
 package com.pacman.tiles;
 
+import com.pacman.renderers.AirRenderer;
+
 public class Air implements Tile {
     final int x;
     final int y;
+    final AirRenderer renderer;
 
     public Air(int x, int y) {
         this.x = x;
         this.y = y;
+        this.renderer = new AirRenderer(this);
     }
 
     @Override
@@ -32,6 +36,11 @@ public class Air implements Tile {
     @Override
     public int getY() {
 	    return this.y;
+    }
+
+    @Override
+    public void draw() {
+        renderer.repaint();
     }
 }
 /*

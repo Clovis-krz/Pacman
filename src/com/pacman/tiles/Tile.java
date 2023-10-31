@@ -9,6 +9,7 @@ public interface Tile {
 
     int getX();
     int getY();
+    void draw();
 }
 
 /*
