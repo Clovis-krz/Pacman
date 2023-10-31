@@ -12,6 +12,8 @@ public interface Entity {
 
 	void move();
 
+	void draw();
+
 	enum Direction {
 		UP,
 		DOWN,

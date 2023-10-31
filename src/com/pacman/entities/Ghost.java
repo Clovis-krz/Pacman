@@ -2,6 +2,7 @@ package com.pacman.entities;
 
 import java.util.Random;
 import com.pacman.Main;
+import com.pacman.renderers.GhostRenderer;
 import com.pacman.tiles.Tile;
 
 
@@ -13,11 +14,14 @@ public class Ghost implements Entity {
 
 	private State state = State.NORMAL;
 	private Direction direction = Direction.getRandom();
+	private final GhostRenderer renderer;
+
 	private int x, y;
 
 	public Ghost(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.renderer = new GhostRenderer(this);
 	}
 
 	private static final int NORMAL_SPEED_MULTIPLIER = 2;
@@ -126,5 +130,10 @@ public class Ghost implements Entity {
 		// If there's no obstacle in the way, we go to the next coordinates.
 		this.x = nextX;
 		this.y = nextY;
+	}
+
+	@Override
+	public void draw() {
+		renderer.repaint();
 	}
 }

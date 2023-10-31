@@ -6,7 +6,7 @@ import com.pacman.tiles.OrangePacball;
 import javax.swing.*;
 
 public class OrangePacballRenderer extends JComponent {
-    final OrangePacball orangePacball;
+    private final OrangePacball orangePacball;
     public OrangePacballRenderer(OrangePacball orangePacball) {
         this.orangePacball = orangePacball;
     }
