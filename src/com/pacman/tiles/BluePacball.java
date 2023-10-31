@@ -1,11 +1,15 @@
 package com.pacman.tiles;
 
+import com.pacman.renderers.BluePacballRenderer;
+
 public class BluePacball implements Tile{
     final int x;
     final int y;
+    final BluePacballRenderer renderer;
     public BluePacball(int x, int y) {
         this.x = x;
         this.y = y;
+        this.renderer = new BluePacballRenderer(this);
     }
     @Override
     public boolean isSolidForPacman() {
@@ -31,6 +35,11 @@ public class BluePacball implements Tile{
     @Override
     public int getY() {
 	    return this.y;
+    }
+
+    @Override
+    public void draw() {
+        renderer.repaint();
     }
 }
 /*
