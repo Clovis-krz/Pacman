@@ -1,5 +1,6 @@
 package com.pacman.tiles;
 
+import com.pacman.Main;
 import com.pacman.renderers.GreenPacballRenderer;
 
 public class GreenPacball implements Tile{
@@ -21,9 +22,19 @@ public class GreenPacball implements Tile{
         return false;
     }
 
-    // TODO: increase by 1000 game points, change labyrinth structure
+    // TODO: change labyrinth structure
     @Override
-    public void onPacmanInterract() {}
+    public void onPacmanInterract() {
+        //Increase Points
+        int prev_points = Main.points;
+        Main.points += 1000;
+
+        //Update life counter if necessary
+        Main.UpdateLife(prev_points);
+
+        //Remove Pacball
+        Main.RemovePacball(this.x, this.y);
+    }
 
     @Override
     public int getX() {
