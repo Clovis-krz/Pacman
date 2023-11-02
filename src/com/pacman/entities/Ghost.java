@@ -31,12 +31,10 @@ public class Ghost implements Entity {
 	public int getX() {
 		return this.x;
 	}
-
 	@Override
 	public int getY() {
 		return this.y;
 	}
-
 	@Override
 	public Direction getDirection() {
 		return this.direction;
