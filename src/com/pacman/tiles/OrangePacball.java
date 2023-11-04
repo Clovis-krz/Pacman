@@ -1,5 +1,8 @@
 package com.pacman.tiles;
 
+import com.pacman.Main;
+import com.pacman.entities.Ghost;
+import com.pacman.entities.Pacman;
 import com.pacman.renderers.OrangePacballRenderer;
 
 public class OrangePacball implements Tile{
@@ -21,9 +24,27 @@ public class OrangePacball implements Tile{
         return false;
     }
 
-    // TODO: increase by 500 game points, pacman become SuperPacman and orange, ghosts become blue
+    // TODO: pacman become orange, ghosts become blue
     @Override
-    public void onPacmanInterract() {}
+    public void onPacmanInterract() {
+        //Set Pacman state to SuperPacman
+        Main.pacman.setState(Pacman.State.SUPER);
+
+        //Set Ghosts state to Vulnerable
+        for (int i = 0; i < Main.ghosts.size(); i++) {
+            Main.ghosts.get(i).setState(Ghost.State.VULNERABLE);
+        }
+
+        //Increase Points
+        int prev_points = Main.points;
+        Main.points += 500;
+
+        //Update life counter if necessary
+        Main.UpdateLife(prev_points);
+
+        //Remove Pacball
+        Main.RemovePacball(this.x, this.y);
+    }
 
     @Override
     public int getX() {

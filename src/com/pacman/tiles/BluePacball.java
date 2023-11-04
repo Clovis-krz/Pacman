@@ -1,5 +1,6 @@
 package com.pacman.tiles;
 
+import com.pacman.Main;
 import com.pacman.renderers.BluePacballRenderer;
 
 public class BluePacball implements Tile{
@@ -21,10 +22,17 @@ public class BluePacball implements Tile{
         return false;
     }
 
-    // TODO: increase by 100 game points
     @Override
     public void onPacmanInterract() {
+        //Increase Points
+        int prev_points = Main.points;
+        Main.points += 100;
 
+        //Update life counter if necessary
+        Main.UpdateLife(prev_points);
+
+        //Remove Pacball
+        Main.RemovePacball(this.x, this.y);
     }
 
     @Override

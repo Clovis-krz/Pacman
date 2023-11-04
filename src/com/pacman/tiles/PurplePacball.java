@@ -1,5 +1,7 @@
 package com.pacman.tiles;
 
+import com.pacman.Main;
+import com.pacman.entities.Pacman;
 import com.pacman.renderers.PurplePacballRenderer;
 
 public class PurplePacball implements Tile{
@@ -23,9 +25,22 @@ public class PurplePacball implements Tile{
         return false;
     }
 
-    // TODO: increase by 300 game points, pacman become invisible, change pacman color to light yellow
+    // TODO: change pacman color to light yellow
     @Override
-    public void onPacmanInterract() {}
+    public void onPacmanInterract() {
+        //Set Pacman state to invisible
+        Main.pacman.setState(Pacman.State.INVISIBLE);
+
+        //Increase Points
+        int prev_points = Main.points;
+        Main.points += 300;
+
+        //Update life counter if necessary
+        Main.UpdateLife(prev_points);
+
+        //Remove Pacball
+        Main.RemovePacball(this.x, this.y);
+    }
 
     @Override
     public int getX() {
