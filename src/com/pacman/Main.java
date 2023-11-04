@@ -96,7 +96,7 @@ public class Main {
 
     //Increase player's life counter every 5000 points
     public static void UpdateLife(int prev_points) {
-        if (prev_points / 5000 > points / 5000) {
+        if (prev_points / 5000 < points / 5000) {
             lifes += 1;
         }
     }
