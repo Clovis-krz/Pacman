@@ -25,21 +25,16 @@ public class PurplePacball implements Tile{
         return false;
     }
 
-    // TODO: change pacman color to light yellow
     @Override
     public void onPacmanInterract() {
-        //Set Pacman state to invisible
-        Main.pacman.setState(Pacman.State.INVISIBLE);
+        // Set Pacman state to invisible
+        Main.setPowerupState(Pacman.State.INVISIBLE);
 
-        //Increase Points
-        int prev_points = Main.points;
-        Main.points += 300;
-
-        //Update life counter if necessary
-        Main.UpdateLife(prev_points);
+        // Increase Points
+        Main.addPoints(300);
 
         //Remove Pacball
-        Main.RemovePacball(this.x, this.y);
+        Main.consumePacball(this.x, this.y);
     }
 
     @Override

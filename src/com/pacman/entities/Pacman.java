@@ -96,4 +96,15 @@ public class Pacman implements Entity {
 	public void draw() {
 		renderer.repaint();
 	}
+
+
+	@Override
+	public boolean teleport(int x, int y) {
+		if (x < 0 || x >= Main.GRID_WIDTH || y < 0 || y >= Main.GRID_HEIGHT) return false;
+
+		this.x = x;
+		this.y = y;
+
+		return true;
+	}
 }

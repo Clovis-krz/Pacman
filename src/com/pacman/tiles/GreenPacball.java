@@ -22,18 +22,15 @@ public class GreenPacball implements Tile{
         return false;
     }
 
-    // TODO: change labyrinth structure
     @Override
     public void onPacmanInterract() {
         //Increase Points
-        int prev_points = Main.points;
-        Main.points += 1000;
+        Main.addPoints(1000);
 
-        //Update life counter if necessary
-        Main.UpdateLife(prev_points);
+        // TODO: change labyrinth structure
 
         //Remove Pacball
-        Main.RemovePacball(this.x, this.y);
+        Main.consumePacball(this.x, this.y);
     }
 
     @Override

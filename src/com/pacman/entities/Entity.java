@@ -14,6 +14,8 @@ public interface Entity {
 
 	void draw();
 
+	boolean teleport(int x, int y);
+
 	enum Direction {
 		UP,
 		DOWN,

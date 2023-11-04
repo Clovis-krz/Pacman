@@ -25,14 +25,10 @@ public class BluePacball implements Tile{
     @Override
     public void onPacmanInterract() {
         //Increase Points
-        int prev_points = Main.points;
-        Main.points += 100;
-
-        //Update life counter if necessary
-        Main.UpdateLife(prev_points);
+        Main.addPoints(100);
 
         //Remove Pacball
-        Main.RemovePacball(this.x, this.y);
+        Main.consumePacball(this.x, this.y);
     }
 
     @Override
@@ -50,6 +46,7 @@ public class BluePacball implements Tile{
         renderer.repaint();
     }
 }
+
 /*
 |__ BluePacball
         |__ final int x, final int y;
