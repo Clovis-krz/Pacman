@@ -13,6 +13,7 @@ public class GhostRenderer extends JComponent {
 
 	public GhostRenderer(Ghost ghost) {
 		this.element = ghost;
+		this.setSize(Main.ELEMENT_SIZE * Main.GRID_WIDTH, Main.ELEMENT_SIZE * Main.GRID_HEIGHT);
 	}
 
 	@Override

@@ -140,7 +140,7 @@ public class Pacman implements Entity {
 				return;
 			}
 
-			if (secondaryTile.isSolidForPacman()) {
+			if (secondaryTile.isSolidForPacman() && reachedWall) {
 				this.x = nextTileX * Main.ELEMENT_SIZE;
 				this.y = nextTileY * Main.ELEMENT_SIZE;
 
@@ -158,7 +158,7 @@ public class Pacman implements Entity {
 				return;
 			}
 
-			if (secondaryTile.isSolidForPacman()) {
+			if (secondaryTile.isSolidForPacman() && reachedWall) {
 				this.x = nextTileX * Main.ELEMENT_SIZE;
 				this.y = nextTileY * Main.ELEMENT_SIZE;
 
@@ -177,12 +177,18 @@ public class Pacman implements Entity {
 
 
 	public void wraparound(int x, int y) {
-		int[] destination = Main.getWrapAroundCoordinates(x, y);
+		int[] destination = Main.getWrapAroundCoordinates(x, y, true);
 
 		if (destination == null) return;
 
-		this.x = destination[0] + direction.getX() * SPEED_MULTIPLIER;
-		this.y = destination[1] + direction.getY() * SPEED_MULTIPLIER;
+		this.x = destination[0] * Main.ELEMENT_SIZE + direction.getX() * SPEED_MULTIPLIER;
+		this.y = destination[1] * Main.ELEMENT_SIZE + direction.getY() * SPEED_MULTIPLIER;
+
+		Tile tile = Main.getTileAtCoords(destination[0], destination[1]);
+
+		if (tile == null) return;
+
+		tile.onPacmanInterract();
 	}
 	
 	@Override
@@ -193,7 +199,7 @@ public class Pacman implements Entity {
 
 	@Override
 	public boolean teleport(int x, int y) {
-		if (x < 0 || x >= Main.GRID_WIDTH || y < 0 || y >= Main.GRID_HEIGHT) return false;
+		if (x < 0 || x >= Main.GRID_WIDTH * Main.ELEMENT_SIZE || y < 0 || y >= Main.GRID_HEIGHT * Main.ELEMENT_SIZE) return false;
 
 		this.x = x;
 		this.y = y;

@@ -23,7 +23,7 @@ public class Main {
     private static long score = 0;
     private static long nextLifeGoal = LIFE_COST;
 
-    private static int timer = 0;
+    private static int powerupTimer = 0;
 
     private static Pacman pacman;
     private static ArrayList<Ghost> ghosts = new ArrayList<>();
@@ -83,13 +83,23 @@ public class Main {
             // Entity collisions
             handleEntityCollisions();
 
+            // Powerup timer
+            if (powerupTimer > 0) powerupTimer -= 1;
+            else {
+                powerupTimer = 0;
+                setPowerupState(Pacman.State.NORMAL);
+            }
+
+            // Temporary life and score display
+            System.out.println("Lifes: " + lives + " Score:" + score);
+
             // Update only 20 times per second
            Thread.sleep(50);
         }
 
         // End of the game, show whether the player won or lost
-        if (lives > 0) System.out.println("You Won");
-        else System.out.println("Game Over");
+        if (lives > 0) System.out.println("You won !");
+        else System.out.println("Game Over !");
     }
 
     public static void addRenderer(JComponent renderer) {
@@ -111,8 +121,67 @@ public class Main {
         return GRID_WIDTH * GRID_HEIGHT;
     }
 
-    // TODO: Implement wrapping fully
-    public static int[] getWrapAroundCoordinates(int x, int y) {
+    public static int[] getWrapAroundCoordinates(int x, int y, boolean pacman) {
+        if (x == 0 || x == GRID_WIDTH - 1) {
+            int entranceNumber = 0;
+            for (int i = 0; i <= y; i += 1) {
+                Tile tile = getTileAtCoords(x, i);
+
+                if (tile == null || (!tile.isSolidForPacman() && pacman) || (!tile.isSolidForGhosts() && !pacman)) entranceNumber += 1;
+            }
+
+            int count = 0;
+            Tile lastExit = null;
+
+            int targetX = 0;
+            if (x == 0) targetX = GRID_WIDTH - 1;
+
+            for (int i = 0; i < GRID_HEIGHT; i += 1) {
+                Tile tile = getTileAtCoords(targetX, i);
+
+                if (tile == null) continue;
+
+                if ((!tile.isSolidForPacman() && pacman) || (!tile.isSolidForGhosts() && !pacman)) {
+                    count += 1;
+                    lastExit = tile;
+                }
+
+                if (count == entranceNumber) break;
+            }
+
+            if (count > 0) return new int[]{lastExit.getX(), lastExit.getY()};
+        }
+
+        if (y == 0 || y == GRID_HEIGHT - 1) {
+            int entranceNumber = 0;
+            for (int i = 0; i <= x; i += 1) {
+                Tile tile = getTileAtCoords(i, y);
+
+                if (tile == null || (!tile.isSolidForPacman() && pacman) || (!tile.isSolidForGhosts() && !pacman)) entranceNumber += 1;
+            }
+
+            int count = 0;
+            Tile lastExit = null;
+
+            int targetY = 0;
+            if (y == 0) targetY = GRID_HEIGHT - 1;
+
+            for (int i = 0; i <= GRID_WIDTH; i += 1) {
+                Tile tile = getTileAtCoords(i, targetY);
+
+                if (tile == null) continue;
+
+                if ((!tile.isSolidForPacman() && pacman) || (!tile.isSolidForGhosts() && !pacman)) {
+                    count += 1;
+                    lastExit = tile;
+                }
+
+                if (i == entranceNumber) break;
+            }
+
+            if (count > 0) return new int[]{lastExit.getX(), lastExit.getY()};
+        }
+
         return null;
     }
 
@@ -122,6 +191,10 @@ public class Main {
 
     public static void consumeLife() {
         lives = Math.max(0, lives - 1);
+
+        pacman.teleport(180, 100);
+
+        for (Ghost ghost : ghosts) ghost.teleport(180, 180);
     }
 
     public static long getScore() {
@@ -145,11 +218,15 @@ public class Main {
 
                 // Ghosts state
                 for (Ghost ghost : ghosts) ghost.setState(Ghost.State.VULNERABLE);
+
+                powerupTimer = 250;
                 break;
 
             case INVISIBLE:
                 // Pacman state
                 pacman.setState(Pacman.State.INVISIBLE);
+
+                powerupTimer = 250;
                 break;
 
             case NORMAL:
@@ -209,13 +286,15 @@ public class Main {
         //G -> Green Pacball
         //O -> Orange Pacball
         //P -> Purple Pacball
+
+
         String[] string_board = {
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
                 "W","B","B","B","B","B","B","W","B","B","B","B","B","B","B","B","B","B","B","W",
                 "W","B","W","B","W","W","B","W","W","W","W","W","B","B","B","B","B","B","B","W",
                 "B","B","W","B","B","W","B","B","B","B","B","W","B","W","B","W","B","W","B","W",
                 "W","W","W","B","W","W","W","A","W","W","W","W","B","B","B","B","B","W","W","W",
-                "W","B","W","B","W","W","B","B","B","B","B","B","B","B","B","B","B","B","B","B",
+                "W","B","B","B","W","W","B","B","B","B","B","B","B","B","B","B","O","B","B","B",
                 "W","W","W","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
                 "W","W","W","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
                 "W","W","W","B","A","A","A","A","A","X","X","A","A","A","A","A","W","W","W","W",
@@ -226,11 +305,11 @@ public class Main {
                 "W","W","B","W","W","W","A","A","A","A","A","A","A","A","W","B","W","W","W","W",
                 "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
                 "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","G","W","A","A","A","A","A","O","A","A","W","W","W","A","B","A","A","W",
+                "W","W","P","W","A","A","A","A","A","O","A","A","W","W","W","A","B","A","A","W",
                 "W","W","A","A","B","W","W","W","W","W","W","W","W","W","W","W","W","W","A","W",
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","A","W",
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-                };
+        };
 
         board = new Tile[400];
         pacballsCounter = 0;
@@ -275,21 +354,17 @@ public class Main {
 
     // TODO: Possibly, hardcode the entity positions to make the code base easier
     private static void initEntities() {
-
-        // Pacman
-        //int[] pac_coord = FindAir();
-        //pacman = new Pacman(pac_coord[0],pac_coord[1]);
-
-        pacman = new Pacman(60, 40);
-        consumePacball(3, 1);
+        pacman = new Pacman(180, 100);
+        consumePacball(9, 5);
 
         // Ghosts
         ghosts = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            //int[] ghost_coord = FindAir();
-            //ghosts.add(new Ghost(ghost_coord[0],ghost_coord[1]));
-            ghosts.add(new Ghost(180, 180));
-        }
+        ghosts.add(new Ghost(180, 180));
+
+        ghosts.add(new Ghost(200, 180));
+
+
+        ghosts.add(new Ghost(200, 200));
     }
 
     //Find Random Air
