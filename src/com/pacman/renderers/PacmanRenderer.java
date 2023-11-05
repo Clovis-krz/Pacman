@@ -20,8 +20,6 @@ public class PacmanRenderer extends JComponent {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		g.setColor(Color.YELLOW);
-
 		int centerX = element.getX() + (Main.ELEMENT_SIZE / 2);
 		int centerY = element.getY() + (Main.ELEMENT_SIZE / 2);
 
@@ -62,5 +60,8 @@ public class PacmanRenderer extends JComponent {
 
 		g.setColor(color);
 		g.fillArc(centerX - RADIUS, centerY - RADIUS, 2 * RADIUS, 2 * RADIUS, angle, 270);
+
+		g.setColor(Color.RED);
+		g.fillRect(element.getX() + (Main.ELEMENT_SIZE) / 2 - 1, element.getY() + (Main.ELEMENT_SIZE) / 2 - 1, 2, 2);
 	}
 }

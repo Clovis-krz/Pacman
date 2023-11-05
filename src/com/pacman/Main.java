@@ -23,6 +23,8 @@ public class Main {
     private static long score = 0;
     private static long nextLifeGoal = LIFE_COST;
 
+    private static int timer = 0;
+
     private static Pacman pacman;
     private static ArrayList<Ghost> ghosts = new ArrayList<>();
 
@@ -185,7 +187,7 @@ public class Main {
             if (ghostX == pacmanX && ghostY == pacmanY) {
                 switch (pacman.getState()) {
                     case SUPER:
-                        ghost.teleport(GRID_WIDTH / 2, GRID_HEIGHT / 2);
+                        ghost.teleport((GRID_WIDTH / 2) * ELEMENT_SIZE, (GRID_HEIGHT / 2) * ELEMENT_SIZE);
                         break;
 
                     case NORMAL:
@@ -209,19 +211,19 @@ public class Main {
         //P -> Purple Pacball
         String[] string_board = {
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-                "W","A","A","B","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-                "W","B","W","B","W","W","W","A","A","P","A","A","A","A","B","W","W","W","W","W",
-                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","A","W","W","W","W","W",
-                "A","A","A","B","W","W","W","A","W","W","W","W","W","W","A","A","A","A","A","A",
-                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
-                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
-                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
-                "W","W","W","B","A","A","A","A","X","B","A","A","A","A","A","A","W","W","W","W",
-                "W","W","W","B","W","W","W","W","W","A","W","A","W","W","W","A","W","W","W","W",
-                "W","W","W","B","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","W","B","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","A","B","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","B","W","W","W","W","A","W","W","W","A","W","W","W","B","W","W","W","W",
+                "W","B","B","B","B","B","B","W","B","B","B","B","B","B","B","B","B","B","B","W",
+                "W","B","W","B","W","W","B","W","W","W","W","W","B","B","B","B","B","B","B","W",
+                "B","B","W","B","B","W","B","B","B","B","B","W","B","W","B","W","B","W","B","W",
+                "W","W","W","B","W","W","W","A","W","W","W","W","B","B","B","B","B","W","W","W",
+                "W","B","W","B","W","W","B","B","B","B","B","B","B","B","B","B","B","B","B","B",
+                "W","W","W","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
+                "W","W","W","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
+                "W","W","W","B","A","A","A","A","A","X","X","A","A","A","A","A","W","W","W","W",
+                "W","W","W","B","W","W","A","A","X","A","A","X","A","A","W","A","W","W","W","W",
+                "W","W","W","B","W","W","A","A","X","A","A","X","A","A","W","A","W","W","W","W",
+                "W","W","W","B","W","W","A","A","A","X","X","A","A","A","W","A","W","W","W","W",
+                "W","W","A","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
+                "W","W","B","W","W","W","A","A","A","A","A","A","A","A","W","B","W","W","W","W",
                 "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
                 "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
                 "W","W","G","W","A","A","A","A","A","O","A","A","W","W","W","A","B","A","A","W",
@@ -275,18 +277,19 @@ public class Main {
     private static void initEntities() {
 
         // Pacman
-        int[] pac_coord = FindAir();
+        //int[] pac_coord = FindAir();
         //pacman = new Pacman(pac_coord[0],pac_coord[1]);
+
         pacman = new Pacman(60, 40);
         consumePacball(3, 1);
 
-        /*
         // Ghosts
         ghosts = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            int[] ghost_coord = FindAir();
-            ghosts.add(new Ghost(ghost_coord[0],ghost_coord[1]));
-        }*/
+            //int[] ghost_coord = FindAir();
+            //ghosts.add(new Ghost(ghost_coord[0],ghost_coord[1]));
+            ghosts.add(new Ghost(180, 180));
+        }
     }
 
     //Find Random Air
