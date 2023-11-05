@@ -7,11 +7,14 @@ public class BluePacball implements Tile{
     final int x;
     final int y;
     final BluePacballRenderer renderer;
+
     public BluePacball(int x, int y) {
         this.x = x;
         this.y = y;
         this.renderer = new BluePacballRenderer(this);
+        Main.addRenderer(renderer);
     }
+
     @Override
     public boolean isSolidForPacman() {
         return false;
@@ -25,14 +28,10 @@ public class BluePacball implements Tile{
     @Override
     public void onPacmanInterract() {
         //Increase Points
-        int prev_points = Main.points;
-        Main.points += 100;
-
-        //Update life counter if necessary
-        Main.UpdateLife(prev_points);
+        Main.addPoints(100);
 
         //Remove Pacball
-        Main.RemovePacball(this.x, this.y);
+        Main.consumePacball(this.x, this.y);
     }
 
     @Override
@@ -49,7 +48,13 @@ public class BluePacball implements Tile{
     public void draw() {
         renderer.repaint();
     }
+
+    @Override
+    public void delete() {
+        Main.removeRenderer(this.renderer);
+    }
 }
+
 /*
 |__ BluePacball
         |__ final int x, final int y;

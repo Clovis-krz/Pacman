@@ -22,6 +22,7 @@ public class Ghost implements Entity {
 		this.x = x;
 		this.y = y;
 		this.renderer = new GhostRenderer(this);
+		Main.addRenderer(renderer);
 	}
 
 	private static final int NORMAL_SPEED_MULTIPLIER = 2;
@@ -38,6 +39,11 @@ public class Ghost implements Entity {
 	@Override
 	public Direction getDirection() {
 		return this.direction;
+	}
+
+	@Override
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 	public State getState() {
@@ -67,27 +73,23 @@ public class Ghost implements Entity {
 		int nextY = this.y + directionY * currentSpeedMultiplier;
 
 		// Upcoming tile coordinates
-		int nextTileX = Math.floorDiv(nextX, Main.ELEMENT_SIZE);
-		int nextTileY = Math.floorDiv(nextY, Main.ELEMENT_SIZE);
+		int nextTileX = tileX + directionX;
+		int nextTileY = tileY + directionY;
 
 		// Upcoming tile
 		Tile nextTile = Main.getTileAtCoords(nextTileX, nextTileY);
-		if (nextTile == null) return;
 
 		// Wraparound mechanics (if the next tile we're going on is outside the board, we wrap around if possible or stop moving otherwise)
-		if (nextTileX < 0 || nextTileX >= Main.getBoardLength() || nextTileY < 0 || nextTileY >= Main.getBoardLength()) {
-			int[] destination = Main.getWrapAroundCoordinates(tileX, tileY);
-
-			if (destination == null) return;
-
-			this.x = destination[0] + directionX * currentSpeedMultiplier;
-			this.y = destination[1] + directionY * currentSpeedMultiplier;
-
+		if (nextTile == null) {
+			wraparound(tileX, tileY, currentSpeedMultiplier);
 			return;
 		}
 
+		boolean reachedWall = (directionX != 0 && (x == (nextTileX + 1) * Main.ELEMENT_SIZE || x + Main.ELEMENT_SIZE == nextTileX * Main.ELEMENT_SIZE)) ||
+		                      (directionY != 0 && (y == (nextTileY + 1) * Main.ELEMENT_SIZE || y + Main.ELEMENT_SIZE == nextTileY * Main.ELEMENT_SIZE));
+
 		// If the upcoming tile is a wall, we stop moving
-		if (nextTile.isSolidForGhosts()) {
+		if (nextTile.isSolidForGhosts() && reachedWall) {
 			// Direction to the left of the ghost
 			Direction leftDirection = direction.counterClockwise();
 			int leftDirectionX = leftDirection.getX();
@@ -130,8 +132,37 @@ public class Ghost implements Entity {
 		this.y = nextY;
 	}
 
+
+	public void wraparound(int x, int y, int speedMultiplier) {
+		int[] destination = Main.getWrapAroundCoordinates(x, y, false);
+
+		if (destination == null) {
+			direction = direction.reverse();
+			return;
+		}
+
+		this.x = destination[0] * Main.ELEMENT_SIZE + direction.getX() * speedMultiplier;
+		this.y = destination[1] * Main.ELEMENT_SIZE + direction.getY() * speedMultiplier;
+	}
+
+
 	@Override
 	public void draw() {
 		renderer.repaint();
+	}
+
+	@Override
+	public boolean teleport(int x, int y) {
+		if (x < 0 || x >= Main.GRID_WIDTH * Main.ELEMENT_SIZE || y < 0 || y >= Main.GRID_HEIGHT * Main.ELEMENT_SIZE) return false;
+
+		this.x = x;
+		this.y = y;
+
+		return true;
+	}
+
+	@Override
+	public void delete() {
+		Main.removeRenderer(this.renderer);
 	}
 }

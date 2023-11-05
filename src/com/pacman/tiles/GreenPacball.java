@@ -11,6 +11,7 @@ public class GreenPacball implements Tile{
         this.x = x;
         this.y = y;
         this.renderer = new GreenPacballRenderer(this);
+        Main.addRenderer(renderer);
     }
     @Override
     public boolean isSolidForPacman() {
@@ -22,18 +23,15 @@ public class GreenPacball implements Tile{
         return false;
     }
 
-    // TODO: change labyrinth structure
     @Override
     public void onPacmanInterract() {
         //Increase Points
-        int prev_points = Main.points;
-        Main.points += 1000;
+        Main.addPoints(1000);
 
-        //Update life counter if necessary
-        Main.UpdateLife(prev_points);
+        // TODO: change labyrinth structure
 
         //Remove Pacball
-        Main.RemovePacball(this.x, this.y);
+        Main.consumePacball(this.x, this.y);
     }
 
     @Override
@@ -49,6 +47,11 @@ public class GreenPacball implements Tile{
     @Override
     public void draw() {
         renderer.repaint();
+    }
+
+    @Override
+    public void delete() {
+        Main.removeRenderer(this.renderer);
     }
 }
 /*
