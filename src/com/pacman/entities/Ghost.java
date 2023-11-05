@@ -22,6 +22,7 @@ public class Ghost implements Entity {
 		this.x = x;
 		this.y = y;
 		this.renderer = new GhostRenderer(this);
+		Main.addRenderer(renderer);
 	}
 
 	private static final int NORMAL_SPEED_MULTIPLIER = 2;
@@ -38,6 +39,11 @@ public class Ghost implements Entity {
 	@Override
 	public Direction getDirection() {
 		return this.direction;
+	}
+
+	@Override
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 	public State getState() {
@@ -143,5 +149,10 @@ public class Ghost implements Entity {
 		this.y = y;
 
 		return true;
+	}
+
+	@Override
+	public void delete() {
+		Main.removeRenderer(this.renderer);
 	}
 }

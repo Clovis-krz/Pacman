@@ -11,6 +11,7 @@ public class GreenPacball implements Tile{
         this.x = x;
         this.y = y;
         this.renderer = new GreenPacballRenderer(this);
+        Main.addRenderer(renderer);
     }
     @Override
     public boolean isSolidForPacman() {
@@ -46,6 +47,11 @@ public class GreenPacball implements Tile{
     @Override
     public void draw() {
         renderer.repaint();
+    }
+
+    @Override
+    public void delete() {
+        Main.removeRenderer(this.renderer);
     }
 }
 /*

@@ -13,6 +13,7 @@ public class PurplePacball implements Tile{
         this.x = x;
         this.y = y;
         this.renderer = new PurplePacballRenderer(this);
+        Main.addRenderer(renderer);
     }
 
     @Override
@@ -50,6 +51,11 @@ public class PurplePacball implements Tile{
     @Override
     public void draw() {
         renderer.repaint();
+    }
+
+    @Override
+    public void delete() {
+        Main.removeRenderer(this.renderer);
     }
 }
 

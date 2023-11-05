@@ -12,6 +12,7 @@ public class OrangePacball implements Tile{
         this.x = x;
         this.y = y;
         this.renderer = new OrangePacballRenderer(this);
+        Main.addRenderer(renderer);
     }
     @Override
     public boolean isSolidForPacman() {
@@ -47,6 +48,11 @@ public class OrangePacball implements Tile{
     @Override
     public void draw() {
         renderer.repaint();
+    }
+
+    @Override
+    public void delete() {
+        Main.removeRenderer(this.renderer);
     }
 }
 

@@ -1,9 +1,13 @@
 package com.pacman;
 
+import com.pacman.entities.Entity;
 import com.pacman.entities.Ghost;
 import com.pacman.entities.Pacman;
 import com.pacman.tiles.*;
+import javax.swing.*;
 
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,15 +24,84 @@ public class Main {
     private static long nextLifeGoal = LIFE_COST;
 
     private static Pacman pacman;
-    private static ArrayList<Ghost> ghosts;
+    private static ArrayList<Ghost> ghosts = new ArrayList<>();
 
     private static Tile[] board;
     private static int pacballsCounter;
 
+    private static final JFrame frame = new JFrame();
+
+    public static void main(String[] args) throws InterruptedException {
+        // Initialisation phase
+        initBoard();
+        initEntities();
+
+        // Window initialisation
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                frame.setSize(400, 400);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.getContentPane().setBackground(Color.BLACK);
+
+                frame.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (pacman == null) return;
+
+                        if (e.getKeyCode() == 38 || e.getKeyChar() == 'z') pacman.setDirection(Entity.Direction.UP);
+                        else if (e.getKeyCode() == 39 || e.getKeyChar() == 'd') pacman.setDirection(Entity.Direction.RIGHT);
+                        else if (e.getKeyCode() == 40 || e.getKeyChar() == 's') pacman.setDirection(Entity.Direction.DOWN);
+                        else if (e.getKeyCode() == 37 || e.getKeyChar() == 'q') pacman.setDirection(Entity.Direction.LEFT);
+                    }
+                });
+
+                frame.setVisible(true);
+                frame.setFocusable(true);
+                frame.requestFocus();
+
+            }
+        });
+
+        // Render loop
+        Timer renderTime = new Timer(1, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                draw();
+            }
+        });
+        renderTime.start();
+
+        // Game loop
+        while(pacballsCounter > 0 && lives > 0) {
+            // Entity movement
+            pacman.move();
+            for (Ghost ghost : ghosts) ghost.move();
+
+            // Entity collisions
+            handleEntityCollisions();
+
+            // Update only 20 times per second
+           Thread.sleep(50);
+        }
+
+        // End of the game, show whether the player won or lost
+        if (lives > 0) System.out.println("You Won");
+        else System.out.println("Game Over");
+    }
+
+    public static void addRenderer(JComponent renderer) {
+        frame.add(renderer);
+    }
+
+    public static void removeRenderer(JComponent renderer) {
+        frame.remove(renderer);
+    }
+
     public static Tile getTileAtCoords(int x, int y) {
         int index = y * GRID_WIDTH + x;
 
-        if (x < GRID_WIDTH && x >= 0 && index < board.length && index >= 0) return board[y*GRID_WIDTH + x];
+        if (x < GRID_WIDTH && x >= 0 && y < GRID_HEIGHT && y >= 0) return board[y*GRID_WIDTH + x];
         else return null;
     }
 
@@ -87,34 +160,21 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        // Initialisation phase
-        initBoard();
-        initEntities();
+    public static void consumePacball(int x, int y) {
+        int index = y * GRID_WIDTH + x;
 
-        // Game loop
-        while(pacballsCounter > 0 && lives > 0) {
-            // Entity movement
-            pacman.move();
-            for (Ghost ghost : ghosts) ghost.move();
+        Tile tile = getTileAtCoords(x, y);
+        if (tile == null) return;
 
-            // Entity collisions
-            handleEntityCollisions();
+        tile.delete();
 
-            // Update drawing
-            draw();
+        board[index] = new Air(x, y);
 
-            // Update only 20 times per second
-            Thread.sleep(50);
-        }
-
-        // End of the game, show whether the player won or lost
-        if (lives > 0) System.out.println("You Won");
-        else System.out.println("Game Over");
+        pacballsCounter -= 1;
     }
 
     //Check if there is a collision between a pacman and a ghost
-    public static void handleEntityCollisions() {
+    private static void handleEntityCollisions() {
         int pacmanX = Math.floorDiv(pacman.getX(), ELEMENT_SIZE);
         int pacmanY = Math.floorDiv(pacman.getY(), ELEMENT_SIZE);
 
@@ -136,15 +196,6 @@ public class Main {
         }
     }
 
-    public static void consumePacball(int x, int y) {
-        int index = y * GRID_WIDTH + x;
-
-        Tile tile = getTileAtCoords(x, y);
-        if (tile == null) return;
-
-        board[index] = new Air(x, y);
-        pacballsCounter -= 1;
-    }
 
     // TODO: Replace with a function to generate the labyrinth procedurally
     //Init board
@@ -158,18 +209,18 @@ public class Main {
         //P -> Purple Pacball
         String[] string_board = {
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-                "W","A","A","A","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-                "W","B","W","A","W","W","W","A","A","P","A","A","A","A","B","W","W","W","W","W",
-                "W","W","W","A","W","W","W","A","W","W","W","W","W","W","A","W","W","W","W","W",
-                "A","A","A","A","W","W","W","A","W","W","W","W","W","W","A","A","A","A","A","A",
-                "W","W","W","A","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
-                "W","W","W","A","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
-                "W","W","W","A","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
-                "W","W","W","A","A","A","A","A","X","B","A","A","A","A","A","A","W","W","W","W",
-                "W","W","W","A","W","W","W","W","W","A","W","A","W","W","W","A","W","W","W","W",
-                "W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","A","A","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
+                "W","A","A","B","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
+                "W","B","W","B","W","W","W","A","A","P","A","A","A","A","B","W","W","W","W","W",
+                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","A","W","W","W","W","W",
+                "A","A","A","B","W","W","W","A","W","W","W","W","W","W","A","A","A","A","A","A",
+                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
+                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
+                "W","W","W","B","W","W","W","A","W","W","W","W","W","W","W","A","W","W","W","W",
+                "W","W","W","B","A","A","A","A","X","B","A","A","A","A","A","A","W","W","W","W",
+                "W","W","W","B","W","W","W","W","W","A","W","A","W","W","W","A","W","W","W","W",
+                "W","W","W","B","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
+                "W","W","W","B","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
+                "W","W","A","B","W","W","W","W","W","W","W","A","W","W","W","A","W","W","W","W",
                 "W","W","B","W","W","W","W","A","W","W","W","A","W","W","W","B","W","W","W","W",
                 "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
                 "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
@@ -177,14 +228,15 @@ public class Main {
                 "W","W","A","A","B","W","W","W","W","W","W","W","W","W","W","W","W","W","A","W",
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","A","W",
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-        };
+                };
 
         board = new Tile[400];
         pacballsCounter = 0;
 
         for (int i = 0; i < string_board.length; i++) {
-            int x = i/GRID_WIDTH;
-            int y = i%GRID_HEIGHT;
+            int x = i % GRID_WIDTH;
+            int y = i / GRID_HEIGHT;
+
             switch (string_board[i]) {
                 case "W":
                     board[i] = new Wall(x, y);
@@ -212,7 +264,7 @@ public class Main {
                     pacballsCounter++;
                     break;
                 default:
-                    System.out.println("Error, unknown expression at coordinates x"+x+", y: "+y);
+                    System.out.println("Error, unknown expression at coordinates x: " + x + ", y: " + y);
             }
 
         }
@@ -221,16 +273,20 @@ public class Main {
 
     // TODO: Possibly, hardcode the entity positions to make the code base easier
     private static void initEntities() {
+
         // Pacman
         int[] pac_coord = FindAir();
-        pacman = new Pacman(pac_coord[0],pac_coord[1]);
+        //pacman = new Pacman(pac_coord[0],pac_coord[1]);
+        pacman = new Pacman(60, 40);
+        consumePacball(3, 1);
 
+        /*
         // Ghosts
         ghosts = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             int[] ghost_coord = FindAir();
             ghosts.add(new Ghost(ghost_coord[0],ghost_coord[1]));
-        }
+        }*/
     }
 
     //Find Random Air
@@ -247,9 +303,6 @@ public class Main {
     }
 
     private static void draw() {
-        for (Tile t : board) t.draw();
-        for (Ghost g : ghosts) g.draw();
-
-        pacman.draw();
+        frame.repaint();
     }
 }

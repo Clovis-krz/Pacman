@@ -10,11 +10,15 @@ public interface Entity {
 
 	Direction getDirection();
 
+	void setDirection(Direction direction);
+
 	void move();
 
 	void draw();
 
 	boolean teleport(int x, int y);
+
+	void delete();
 
 	enum Direction {
 		UP,

@@ -13,7 +13,8 @@ public class Pacman implements Entity {
 	}
 
 	private State state = State.NORMAL;
-	private Direction direction = Direction.RIGHT;
+	private Direction direction = Direction.DOWN;
+
 	private final PacmanRenderer renderer;
 	private int x, y;
 
@@ -21,6 +22,7 @@ public class Pacman implements Entity {
 		this.x = x;
 		this.y = y;
 		this.renderer = new PacmanRenderer(this);
+		Main.addRenderer(renderer);
 	}
 
 	private static final int SPEED_MULTIPLIER = 2;
@@ -38,6 +40,11 @@ public class Pacman implements Entity {
 	@Override
 	public Direction getDirection() {
 		return this.direction;
+	}
+
+	@Override
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 	public State getState() {
@@ -65,6 +72,10 @@ public class Pacman implements Entity {
 		// Upcoming tile coordinates
 		int nextTileX = Math.floorDiv(nextX, Main.ELEMENT_SIZE);
 		int nextTileY = Math.floorDiv(nextY, Main.ELEMENT_SIZE);
+		if (directionX > 0 || directionY > 0) {
+			nextTileX = Math.ceilDiv(nextX, Main.ELEMENT_SIZE);
+			nextTileY = Math.ceilDiv(nextY, Main.ELEMENT_SIZE);
+		}
 
 		// Upcoming tile
 		Tile nextTile = Main.getTileAtCoords(nextTileX, nextTileY);
@@ -84,11 +95,24 @@ public class Pacman implements Entity {
 		// If the upcoming tile is a wall, we stop moving
 		if (nextTile == null || nextTile.isSolidForPacman()) return;
 
+		// If we're not aligned to the grid while going horizontal
+		if (directionX != 0 && y % Main.ELEMENT_SIZE > 2) {
+			Tile secondaryTile = Main.getTileAtCoords(nextTileX, nextTileY + 1);
+
+			if (secondaryTile != null && secondaryTile.isSolidForPacman()) return;
+		}
+
+		// If we're not aligned to the grid while going vertical
+		if (directionY != 0 && x % Main.ELEMENT_SIZE > 2) {
+			Tile secondaryTile = Main.getTileAtCoords(nextTileX + 1, nextTileY);
+
+			if (secondaryTile != null && secondaryTile.isSolidForPacman()) return;
+		}
+
 		// If there's no obstacle in the way, we go to the next coordinates.
 		this.x = nextX;
 		this.y = nextY;
 
-		// TODO: Adapt call depending on codebase changes
 		if (tileX != nextTileX || tileY != nextTileY) nextTile.onPacmanInterract();
 	}
 	
@@ -106,5 +130,10 @@ public class Pacman implements Entity {
 		this.y = y;
 
 		return true;
+	}
+
+	@Override
+	public void delete() {
+		Main.removeRenderer(this.renderer);
 	}
 }

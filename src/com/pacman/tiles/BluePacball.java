@@ -7,11 +7,14 @@ public class BluePacball implements Tile{
     final int x;
     final int y;
     final BluePacballRenderer renderer;
+
     public BluePacball(int x, int y) {
         this.x = x;
         this.y = y;
         this.renderer = new BluePacballRenderer(this);
+        Main.addRenderer(renderer);
     }
+
     @Override
     public boolean isSolidForPacman() {
         return false;
@@ -44,6 +47,11 @@ public class BluePacball implements Tile{
     @Override
     public void draw() {
         renderer.repaint();
+    }
+
+    @Override
+    public void delete() {
+        Main.removeRenderer(this.renderer);
     }
 }
 
