@@ -23,7 +23,7 @@ public class GhostRenderer extends JComponent {
 		Color color;
 		switch (element.getState()) {
 			case VULNERABLE:
-				color = new Color(41, 0, 204);
+				color = new Color(3, 165, 252);
 				break;
 
 			default:
