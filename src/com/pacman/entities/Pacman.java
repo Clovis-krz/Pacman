@@ -13,7 +13,7 @@ public class Pacman implements Entity {
 	}
 
 	private State state = State.NORMAL;
-	private Direction direction = Direction.DOWN;
+	private Direction direction = Direction.RIGHT;
 
 	private final PacmanRenderer renderer;
 	private int x, y;

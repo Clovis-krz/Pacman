@@ -193,6 +193,7 @@ public class Main {
         lives = Math.max(0, lives - 1);
 
         pacman.teleport(180, 100);
+        pacman.setDirection(Entity.Direction.RIGHT);
 
         for (Ghost ghost : ghosts) ghost.teleport(180, 180);
     }
@@ -264,7 +265,7 @@ public class Main {
             if (ghostX == pacmanX && ghostY == pacmanY) {
                 switch (pacman.getState()) {
                     case SUPER:
-                        ghost.teleport((GRID_WIDTH / 2) * ELEMENT_SIZE, (GRID_HEIGHT / 2) * ELEMENT_SIZE);
+                        ghost.teleport(180, 180);
                         break;
 
                     case NORMAL:
@@ -290,24 +291,24 @@ public class Main {
 
         String[] string_board = {
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
-                "W","B","B","B","B","B","B","W","B","B","B","B","B","B","B","B","B","B","B","W",
+                "W","B","P","B","B","B","B","W","B","B","B","B","B","B","B","B","B","O","B","W",
                 "W","B","W","B","W","W","B","W","W","W","W","W","B","B","B","B","B","B","B","W",
-                "B","B","W","B","B","W","B","B","B","B","B","W","B","W","B","W","B","W","B","W",
-                "W","W","W","B","W","W","W","A","W","W","W","W","B","B","B","B","B","W","W","W",
-                "W","B","B","B","W","W","B","B","B","B","B","B","B","B","B","B","O","B","B","B",
-                "W","W","W","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
-                "W","W","W","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
-                "W","W","W","B","A","A","A","A","A","X","X","A","A","A","A","A","W","W","W","W",
-                "W","W","W","B","W","W","A","A","X","A","A","X","A","A","W","A","W","W","W","W",
-                "W","W","W","B","W","W","A","A","X","A","A","X","A","A","W","A","W","W","W","W",
-                "W","W","W","B","W","W","A","A","A","X","X","A","A","A","W","A","W","W","W","W",
-                "W","W","A","B","W","W","A","A","A","A","A","A","A","A","W","A","W","W","W","W",
-                "W","W","B","W","W","W","A","A","A","A","A","A","A","A","W","B","W","W","W","W",
-                "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","A","W","W","W","W","A","W","W","W","A","W","W","W","A","W","W","W","W",
-                "W","W","P","W","A","A","A","A","A","O","A","A","W","W","W","A","B","A","A","W",
-                "W","W","A","A","B","W","W","W","W","W","W","W","W","W","W","W","W","W","A","W",
-                "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","A","W",
+                "B","B","W","B","B","W","B","B","P","B","B","W","B","W","B","W","B","W","B","W",
+                "W","B","W","B","W","W","B","W","W","W","W","W","B","B","B","B","B","B","B","W",
+                "W","B","W","B","B","W","O","B","B","B","B","B","B","B","B","B","B","B","B","B",
+                "W","B","W","B","W","W","W","W","W","W","W","W","B","W","B","W","B","W","B","W",
+                "W","B","B","B","B","B","A","A","A","A","A","A","A","A","B","B","B","W","B","W",
+                "W","B","W","B","B","B","W","A","A","X","X","A","A","W","B","W","B","W","B","W",
+                "W","B","W","B","B","B","W","A","X","A","A","X","A","W","B","W","B","W","B","W",
+                "W","B","W","B","B","B","W","A","X","A","A","X","A","W","B","W","B","B","B","W",
+                "W","B","W","B","B","B","W","A","A","X","X","A","A","W","B","W","W","W","W","W",
+                "W","B","W","B","B","B","B","A","A","A","A","A","A","B","B","B","B","P","B","B",
+                "W","B","W","B","B","B","B","W","W","W","W","W","W","W","B","W","W","W","W","W",
+                "W","B","W","W","B","B","B","B","B","B","B","B","B","W","B","B","B","B","B","W",
+                "B","B","B","B","B","B","B","B","B","B","B","O","B","W","B","W","W","W","W","W",
+                "W","B","W","W","W","W","W","B","W","B","B","B","B","W","B","B","B","O","B","W",
+                "W","B","W","B","B","B","W","B","W","W","W","W","W","W","B","W","W","W","W","W",
+                "W","B","B","B","B","B","W","P","B","B","B","B","B","B","B","B","B","B","B","W",
                 "W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W","W",
         };
 
