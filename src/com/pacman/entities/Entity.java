@@ -5,7 +5,6 @@ import java.util.Random;
 
 public interface Entity {
 	int getX();
-
 	int getY();
 
 	Direction getDirection();

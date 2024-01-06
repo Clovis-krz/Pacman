@@ -1,7 +1,7 @@
 package com.pacman.renderers;
 
 import java.awt.*;
-import com.pacman.Main;
+import com.pacman.Game;
 import com.pacman.entities.Pacman;
 import javax.swing.*;
 
@@ -13,15 +13,15 @@ public class PacmanRenderer extends JComponent {
 
 	public PacmanRenderer(Pacman pacman) {
 		this.element = pacman;
-		this.setSize(Main.ELEMENT_SIZE * Main.GRID_WIDTH, Main.ELEMENT_SIZE * Main.GRID_HEIGHT);
+		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		int centerX = element.getX() + (Main.ELEMENT_SIZE / 2);
-		int centerY = element.getY() + (Main.ELEMENT_SIZE / 2);
+		int centerX = element.getX() + (Game.ELEMENT_SIZE / 2);
+		int centerY = element.getY() + (Game.ELEMENT_SIZE / 2);
 
 		Color color;
 		switch (element.getState()) {

@@ -1,5 +1,8 @@
 package com.pacman.tiles;
 
+import java.awt.*;
+
+
 public interface Tile {
     boolean isSolidForPacman();
 
@@ -11,15 +14,7 @@ public interface Tile {
     int getY();
     void draw();
 
+    Color getColor();
+
     void delete();
 }
-
-/*
-
-Tile (interface)
-        |__ boolean isSolidForPacman()
-        |__ boolean isSolidForGhosts()
-        |__ void onPacmanInterract()
-        |__ int getX();
-        |__ int getY();
- */

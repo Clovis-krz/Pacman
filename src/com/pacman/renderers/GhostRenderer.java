@@ -1,7 +1,7 @@
 package com.pacman.renderers;
 
 import java.awt.*;
-import com.pacman.Main;
+import com.pacman.Game;
 import com.pacman.entities.Ghost;
 import javax.swing.*;
 
@@ -13,7 +13,7 @@ public class GhostRenderer extends JComponent {
 
 	public GhostRenderer(Ghost ghost) {
 		this.element = ghost;
-		this.setSize(Main.ELEMENT_SIZE * Main.GRID_WIDTH, Main.ELEMENT_SIZE * Main.GRID_HEIGHT);
+		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT);
 	}
 
 	@Override
@@ -31,8 +31,8 @@ public class GhostRenderer extends JComponent {
 				break;
 		}
 
-		int centerX = element.getX() + (Main.ELEMENT_SIZE / 2);
-		int centerY = element.getY() + (Main.ELEMENT_SIZE / 2);
+		int centerX = element.getX() + (Game.ELEMENT_SIZE / 2);
+		int centerY = element.getY() + (Game.ELEMENT_SIZE / 2);
 
 		g.setColor(color);
 		g.fillArc(centerX - RADIUS, centerY - RADIUS, 2 * RADIUS, 2 * RADIUS, 0, 180);
