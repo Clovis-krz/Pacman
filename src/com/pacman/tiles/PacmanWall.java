@@ -1,17 +1,20 @@
 package com.pacman.tiles;
 
+import java.awt.*;
+import com.pacman.Game;
 import com.pacman.Main;
-import com.pacman.renderers.PacmanWallRenderer;
+import com.pacman.renderers.TileRenderer;
+
 
 public class PacmanWall implements Tile{
-    final int x;
-    final int y;
-    final PacmanWallRenderer renderer;
+    private final int x;
+    private final int y;
+    private final TileRenderer renderer;
 
     public PacmanWall(int x, int y) {
         this.x = x;
         this.y = y;
-        this.renderer = new PacmanWallRenderer(this);
+        this.renderer = new TileRenderer(this);
         Main.addRenderer(renderer);
     }
 
@@ -44,17 +47,12 @@ public class PacmanWall implements Tile{
     }
 
     @Override
+    public Color getColor() {
+        return Color.RED;
+    }
+
+    @Override
     public void delete() {
         Main.removeRenderer(this.renderer);
     }
 }
-/*
-|__ PacmanWall
-        |__ final int x, final int y;
-        |__ PacmanWall(int x, int y);
-        |__ getX() → x
-        |__ getY() → Y
-        |__ isSolidForPacman() → true
-        |__ isSolidForGhosts() → false
-        |__ onPacmanInterract(): rien;
- */

@@ -1,5 +1,6 @@
 package com.pacman.entities;
 
+import com.pacman.Game;
 import com.pacman.Main;
 import com.pacman.renderers.PacmanRenderer;
 import com.pacman.tiles.Tile;
@@ -58,16 +59,16 @@ public class Pacman implements Entity {
 	@Override
 	public void move() {
 		// Second corner of pacman
-		int x2 = x + Main.ELEMENT_SIZE;
-		int y2 = y + Main.ELEMENT_SIZE;
+		int x2 = x + Game.ELEMENT_SIZE;
+		int y2 = y + Game.ELEMENT_SIZE;
 
 		// Offset coordinates for the current direction we're in.
 		int directionX = direction.getX();
 		int directionY = direction.getY();
 
 		// Current tile coordinates
-		int tileX = Math.floorDiv(this.x, Main.ELEMENT_SIZE);
-		int tileY = Math.floorDiv(this.y, Main.ELEMENT_SIZE);
+		int tileX = Math.floorDiv(this.x, Game.ELEMENT_SIZE);
+		int tileY = Math.floorDiv(this.y, Game.ELEMENT_SIZE);
 
 		// Upcoming x, y coordinates
 		int nextX = this.x + directionX * SPEED_MULTIPLIER;
@@ -78,7 +79,7 @@ public class Pacman implements Entity {
 		int nextTileY = tileY + directionY;
 
 		// Upcoming tile
-		Tile nextTile = Main.getTileAtCoords(nextTileX, nextTileY);
+		Tile nextTile = Game.getTileAtCoords(nextTileX, nextTileY);
 
 		// Wraparound mechanics (if the next tile we're going on is outside the board, we wrap around if possible or stop moving otherwise)
 		if (nextTile == null) {
@@ -88,13 +89,13 @@ public class Pacman implements Entity {
 
 		Tile secondaryTile = null;
 
-		boolean reachedWall = (directionX != 0 && (x == (nextTileX + 1) * Main.ELEMENT_SIZE || x + Main.ELEMENT_SIZE == nextTileX * Main.ELEMENT_SIZE)) ||
-		                      (directionY != 0 && (y == (nextTileY + 1) * Main.ELEMENT_SIZE || y + Main.ELEMENT_SIZE == nextTileY * Main.ELEMENT_SIZE));
+		boolean reachedWall = (directionX != 0 && (x == (nextTileX + 1) * Game.ELEMENT_SIZE || x + Game.ELEMENT_SIZE == nextTileX * Game.ELEMENT_SIZE)) ||
+		                      (directionY != 0 && (y == (nextTileY + 1) * Game.ELEMENT_SIZE || y + Game.ELEMENT_SIZE == nextTileY * Game.ELEMENT_SIZE));
 
 		// If the upcoming tile is a wall, we stop moving
 		if (nextTile.isSolidForPacman() && reachedWall) {
-			if (directionX != 0 && y % Main.ELEMENT_SIZE > 0) {
-				secondaryTile = Main.getTileAtCoords(nextTileX, nextTileY + 1);
+			if (directionX != 0 && y % Game.ELEMENT_SIZE > 0) {
+				secondaryTile = Game.getTileAtCoords(nextTileX, nextTileY + 1);
 
 				if (secondaryTile == null) {
 					wraparound(tileX, tileY);
@@ -102,8 +103,8 @@ public class Pacman implements Entity {
 				}
 
 				if (!secondaryTile.isSolidForPacman()) {
-					this.x = secondaryTile.getX() * Main.ELEMENT_SIZE;
-					this.y = secondaryTile.getY() * Main.ELEMENT_SIZE;
+					this.x = secondaryTile.getX() * Game.ELEMENT_SIZE;
+					this.y = secondaryTile.getY() * Game.ELEMENT_SIZE;
 
 					secondaryTile.onPacmanInterract();
 					return;
@@ -111,8 +112,8 @@ public class Pacman implements Entity {
 			}
 
 			// If we're not aligned to the grid while going vertical
-			if (directionY != 0 && x % Main.ELEMENT_SIZE > 0) {
-				secondaryTile = Main.getTileAtCoords(nextTileX + 1, nextTileY);
+			if (directionY != 0 && x % Game.ELEMENT_SIZE > 0) {
+				secondaryTile = Game.getTileAtCoords(nextTileX + 1, nextTileY);
 
 				if (secondaryTile == null) {
 					wraparound(tileX, tileY);
@@ -120,8 +121,8 @@ public class Pacman implements Entity {
 				}
 
 				if (!secondaryTile.isSolidForPacman()) {
-					this.x = secondaryTile.getX() * Main.ELEMENT_SIZE;
-					this.y = secondaryTile.getY() * Main.ELEMENT_SIZE;
+					this.x = secondaryTile.getX() * Game.ELEMENT_SIZE;
+					this.y = secondaryTile.getY() * Game.ELEMENT_SIZE;
 
 					secondaryTile.onPacmanInterract();
 					return;
@@ -132,8 +133,8 @@ public class Pacman implements Entity {
 		}
 
 		// If we're not aligned to the grid while going horizontal
-		if (directionX != 0 && y % Main.ELEMENT_SIZE > 0) {
-			secondaryTile = Main.getTileAtCoords(nextTileX, nextTileY + 1);
+		if (directionX != 0 && y % Game.ELEMENT_SIZE > 0) {
+			secondaryTile = Game.getTileAtCoords(nextTileX, nextTileY + 1);
 
 			if (secondaryTile == null) {
 				wraparound(tileX, tileY);
@@ -141,8 +142,8 @@ public class Pacman implements Entity {
 			}
 
 			if (secondaryTile.isSolidForPacman() && reachedWall) {
-				this.x = nextTileX * Main.ELEMENT_SIZE;
-				this.y = nextTileY * Main.ELEMENT_SIZE;
+				this.x = nextTileX * Game.ELEMENT_SIZE;
+				this.y = nextTileY * Game.ELEMENT_SIZE;
 
 				nextTile.onPacmanInterract();
 				return;
@@ -150,8 +151,8 @@ public class Pacman implements Entity {
 		}
 
 		// If we're not aligned to the grid while going vertical
-		if (directionY != 0 && x % Main.ELEMENT_SIZE > 0) {
-			secondaryTile = Main.getTileAtCoords(nextTileX + 1, nextTileY);
+		if (directionY != 0 && x % Game.ELEMENT_SIZE > 0) {
+			secondaryTile = Game.getTileAtCoords(nextTileX + 1, nextTileY);
 
 			if (secondaryTile == null) {
 				wraparound(tileX, tileY);
@@ -159,8 +160,8 @@ public class Pacman implements Entity {
 			}
 
 			if (secondaryTile.isSolidForPacman() && reachedWall) {
-				this.x = nextTileX * Main.ELEMENT_SIZE;
-				this.y = nextTileY * Main.ELEMENT_SIZE;
+				this.x = nextTileX * Game.ELEMENT_SIZE;
+				this.y = nextTileY * Game.ELEMENT_SIZE;
 
 				nextTile.onPacmanInterract();
 				return;
@@ -177,14 +178,14 @@ public class Pacman implements Entity {
 
 
 	public void wraparound(int x, int y) {
-		int[] destination = Main.getWrapAroundCoordinates(x, y, true);
+		int[] destination = Game.getWrapAroundCoordinates(x, y, true);
 
 		if (destination == null) return;
 
-		this.x = destination[0] * Main.ELEMENT_SIZE + direction.getX() * SPEED_MULTIPLIER;
-		this.y = destination[1] * Main.ELEMENT_SIZE + direction.getY() * SPEED_MULTIPLIER;
+		this.x = destination[0] * Game.ELEMENT_SIZE + direction.getX() * SPEED_MULTIPLIER;
+		this.y = destination[1] * Game.ELEMENT_SIZE + direction.getY() * SPEED_MULTIPLIER;
 
-		Tile tile = Main.getTileAtCoords(destination[0], destination[1]);
+		Tile tile = Game.getTileAtCoords(destination[0], destination[1]);
 
 		if (tile == null) return;
 
@@ -199,7 +200,7 @@ public class Pacman implements Entity {
 
 	@Override
 	public boolean teleport(int x, int y) {
-		if (x < 0 || x >= Main.GRID_WIDTH * Main.ELEMENT_SIZE || y < 0 || y >= Main.GRID_HEIGHT * Main.ELEMENT_SIZE) return false;
+		if (x < 0 || x >= Game.GRID_WIDTH * Game.ELEMENT_SIZE || y < 0 || y >= Game.GRID_HEIGHT * Game.ELEMENT_SIZE) return false;
 
 		this.x = x;
 		this.y = y;

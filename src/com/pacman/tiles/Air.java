@@ -1,8 +1,11 @@
 package com.pacman.tiles;
 
+import java.awt.*;
+
+
 public class Air implements Tile {
-    final int x;
-    final int y;
+    private final int x;
+    private final int y;
 
     public Air(int x, int y) {
         this.x = x;
@@ -20,9 +23,7 @@ public class Air implements Tile {
     }
 
     @Override
-    public void onPacmanInterract() {
-
-    }
+    public void onPacmanInterract() {}
 
     @Override
     public int getX() {
@@ -38,16 +39,10 @@ public class Air implements Tile {
     public void draw() {}
 
     @Override
+    public Color getColor() {
+        return null;
+    }
+
+    @Override
     public void delete() {}
 }
-
-/*
-|__ Air
-        |__ final int x, final int y;
-        |__ Air(int x, int y);
-        |__ getX() → x
-        |__ getY() → Y
-        |__ isSolidForPacman() → false
-        |__ isSolidForGhosts() → false
-        |__ onPacmanInterract(): rien;
- */
