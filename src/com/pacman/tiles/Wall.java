@@ -1,6 +1,10 @@
 package com.pacman.tiles;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import com.pacman.Game;
 import com.pacman.Main;
 import com.pacman.renderers.TileRenderer;
@@ -10,10 +14,12 @@ public class Wall implements Tile {
     private final int y;
 
     private final TileRenderer renderer;
+    private final Color wallcolor;
 
-    public Wall(int x, int y) {
+    public Wall(int x, int y, Color wall_color) {
         this.x = x;
         this.y = y;
+        this.wallcolor = wall_color;
         this.renderer = new TileRenderer(this);
         Main.addRenderer(renderer);
     }
@@ -48,7 +54,7 @@ public class Wall implements Tile {
 
     @Override
     public Color getColor() {
-        return Color.BLUE;
+        return wallcolor;
     }
 
     @Override
