@@ -11,7 +11,7 @@ public class TileRenderer extends JComponent {
 
     public TileRenderer(Tile element) {
         this.element = element;
-        this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT);
+        this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT + GuiRenderer.GUI_SIZE);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class TileRenderer extends JComponent {
         super.paintComponent(g);
 
         int x = element.getX() * Game.ELEMENT_SIZE;
-        int y = element.getY() * Game.ELEMENT_SIZE;
+        int y = element.getY() * Game.ELEMENT_SIZE + GuiRenderer.GUI_SIZE;
 
         g.setColor(element.getColor());
         g.fillRect(x, y, Game.ELEMENT_SIZE, Game.ELEMENT_SIZE);

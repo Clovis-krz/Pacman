@@ -19,10 +19,10 @@ public class BluePacball extends AbstractPacball {
 
     @Override
     public void onPacmanInterract() {
-        //Increase Points
+        // Increase score
         Game.addPoints(100);
 
-        //Remove Pacball
+        // Remove pacball
         Game.consumePacball(this.x, this.y);
     }
 
@@ -48,7 +48,7 @@ public class BluePacball extends AbstractPacball {
 
     @Override
     public Color getColor() {
-        return Color.CYAN;
+        return new Color(0, 140, 255);
     }
 
     @Override

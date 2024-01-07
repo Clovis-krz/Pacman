@@ -13,7 +13,7 @@ public class PacmanRenderer extends JComponent {
 
 	public PacmanRenderer(Pacman pacman) {
 		this.element = pacman;
-		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT);
+		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT + GuiRenderer.GUI_SIZE);
 	}
 
 	@Override
@@ -21,23 +21,9 @@ public class PacmanRenderer extends JComponent {
 		super.paintComponent(g);
 
 		int centerX = element.getX() + (Game.ELEMENT_SIZE / 2);
-		int centerY = element.getY() + (Game.ELEMENT_SIZE / 2);
+		int centerY = element.getY() + (Game.ELEMENT_SIZE / 2) + GuiRenderer.GUI_SIZE;
 
-		Color color;
-		switch (element.getState()) {
-			case SUPER:
-				color = Color.ORANGE;
-				break;
-
-			case INVISIBLE:
-				color = new Color(255, 255, 163);
-				break;
-
-			default:
-				color = Color.YELLOW;
-				break;
-		}
-
+		Color color = Game.getPowerupState().getPacmanColor();
 
 		int angle;
 		switch (element.getDirection()) {

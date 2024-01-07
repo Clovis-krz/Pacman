@@ -6,14 +6,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import com.pacman.entities.Entity;
-import com.pacman.entities.Ghost;
-import com.pacman.entities.Pacman;
 import javax.swing.*;
 
 
 public class Main {
 	// Window used by the entire game
 	private static final JFrame frame = new JFrame();
+
+	public static final int WINDOW_WIDTH = 414;
+	public static final int WINDOW_HEIGHT = 492;
 
 	/**
 	 Main entrypoint to correctly initialise the window and start a game
@@ -26,6 +27,10 @@ public class Main {
 		Timer renderTime = new Timer(1, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// On certain OSes, the minimum and maximum size of the JFrame is ignored, this enforces the window size regardless.
+				frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+				// Updates all components in an optimized way.
 				frame.repaint();
 			}
 		});
@@ -42,8 +47,11 @@ public class Main {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				frame.setSize(414, 438);
-				frame.setMinimumSize(new Dimension(414, 438));
+				// Dimensions for the window
+				frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+				frame.setMaximumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+				frame.setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.getContentPane().setBackground(Color.BLACK);
 
@@ -51,15 +59,11 @@ public class Main {
 				frame.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyPressed(KeyEvent e) {
-
-						Pacman pacman = Game.getPacman();
-						if (pacman == null) return;
-
 						// Pacman controls
-						if (e.getKeyCode() == 38 || e.getKeyChar() == 'z') pacman.setDirection(Entity.Direction.UP);
-						else if (e.getKeyCode() == 39 || e.getKeyChar() == 'd') pacman.setDirection(Entity.Direction.RIGHT);
-						else if (e.getKeyCode() == 40 || e.getKeyChar() == 's') pacman.setDirection(Entity.Direction.DOWN);
-						else if (e.getKeyCode() == 37 || e.getKeyChar() == 'q') pacman.setDirection(Entity.Direction.LEFT);
+						if (e.getKeyCode() == 38 || e.getKeyChar() == 'z') Game.setPlayerDirection(Entity.Direction.UP);
+						else if (e.getKeyCode() == 39 || e.getKeyChar() == 'd') Game.setPlayerDirection(Entity.Direction.RIGHT);
+						else if (e.getKeyCode() == 40 || e.getKeyChar() == 's') Game.setPlayerDirection(Entity.Direction.DOWN);
+						else if (e.getKeyCode() == 37 || e.getKeyChar() == 'q') Game.setPlayerDirection(Entity.Direction.LEFT);
 
 						// Reset the game by pressing ENTER.
 						else if (e.getKeyChar() == '\n') Game.prepareToReset();
