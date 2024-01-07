@@ -11,7 +11,7 @@ public class PacballRenderer extends JComponent {
 
 	public PacballRenderer(AbstractPacball element) {
 		this.element = element;
-		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT);
+		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT + GuiRenderer.GUI_SIZE);
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class PacballRenderer extends JComponent {
 
 		int radius = element.getRadius();
 		int x = element.getX() * Game.ELEMENT_SIZE + (Game.ELEMENT_SIZE / 2) - radius;
-		int y = element.getY() * Game.ELEMENT_SIZE + (Game.ELEMENT_SIZE / 2) - radius;
+		int y = element.getY() * Game.ELEMENT_SIZE + (Game.ELEMENT_SIZE / 2) - radius + GuiRenderer.GUI_SIZE;
 
 		g.setColor(element.getColor());
 

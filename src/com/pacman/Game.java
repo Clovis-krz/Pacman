@@ -3,6 +3,9 @@ package com.pacman;
 import com.pacman.entities.Entity;
 import com.pacman.entities.Ghost;
 import com.pacman.entities.Pacman;
+import com.pacman.powerups.NormalState;
+import com.pacman.powerups.State;
+import com.pacman.renderers.GuiRenderer;
 import com.pacman.tiles.*;
 
 import java.util.ArrayList;
@@ -21,10 +24,13 @@ public class Game {
     private static int lives; // Amount of lives that currently pacman has
     private static long nextLifeGoal; // The next score value required to gain a new life.
     private static long score; // Current plauer score
-    private static int powerupTimer; // Amount of time remaining for pacman's powerup
     private static int remainingPacballs; // Amount of pacballs remaining before the player wins
 
     private static boolean shouldRestart; // Set to true to make the game restart, used for thread safety to stay on the main thread.
+
+    // Powerup state
+    private static State powerupState;
+    private static int powerupTimer; // Amount of time remaining for pacman's powerup
 
     // Entities
     private static Pacman pacman; // The pacman entity
@@ -32,6 +38,9 @@ public class Game {
 
     // Game board, holding a flattened grid of static Tile objects.
     private static Tile[] board;
+
+    // Game GUI object
+    private static GuiRenderer guiRenderer;
 
     /**
      Initialises a new game
@@ -44,8 +53,11 @@ public class Game {
         lives = 3;
         nextLifeGoal = LIFE_COST;
         score = 0;
-        powerupTimer = 0;
+
         shouldRestart = false;
+
+        powerupState = new NormalState();
+        powerupTimer = 0;
 
         // Initialises the maze
         board = new Tile[400];
@@ -61,6 +73,9 @@ public class Game {
         ghosts.add(new Ghost(200, 180));
         ghosts.add(new Ghost(200, 200));
         ghosts.add(new Ghost(180, 200));
+
+        // Creates the GUI
+        guiRenderer = new GuiRenderer();
 
         // Starts the main game loop
         Game.loop();
@@ -83,11 +98,8 @@ public class Game {
             if (powerupTimer > 0) powerupTimer -= 1;
             else {
                 powerupTimer = 0;
-                setPowerupState(Pacman.State.NORMAL);
+                setPowerupState(new NormalState());
             }
-
-            // Temporary life and score display
-            System.out.println("Lifes: " + lives + " Score:" + score);
 
             // Update only 20 times per second
             Thread.sleep(50);
@@ -95,8 +107,8 @@ public class Game {
 
         // End of the game, show whether the player won or lost, unless the game restarted.
         if (!shouldRestart) {
-            if (lives > 0) System.out.println("You won !");
-            else System.out.println("Game Over !");
+            if (lives > 0) guiRenderer.setType(GuiRenderer.Type.WIN);
+            else guiRenderer.setType(GuiRenderer.Type.LOSE);
         }
 
         // Loop used to allow the player to press Enter to restart
@@ -139,11 +151,21 @@ public class Game {
     }
 
     /**
-     @return The Pacman object, in case an external class uses it.
+     Changes the plauer's direction to the provided one
+
+     @param direction The direction to apply to pacman
     */
-    public static Pacman getPacman() {
-        return pacman;
+    public static void setPlayerDirection(Entity.Direction direction) {
+        pacman.setDirection(direction);
     }
+
+    /**
+     @return The current powerup state object
+    */
+    public static State getPowerupState() {
+        return powerupState;
+    }
+
 
     /**
      Returns the Tile object located at the given grid coordinates.
@@ -296,37 +318,13 @@ public class Game {
     }
 
     /**
-     Changes the currently active Pacman state
+     Changes the currently active powerup state, and sets the powerup timer appropriately.
 
      @param state The State to switch to.
     */
-    public static void setPowerupState(Pacman.State state) {
-        switch (state) {
-            case SUPER:
-                // Pacman state
-                pacman.setState(Pacman.State.SUPER);
-
-                // Ghosts state
-                for (Ghost ghost : ghosts) ghost.setState(Ghost.State.VULNERABLE);
-
-                powerupTimer = 250;
-                break;
-
-            case INVISIBLE:
-                // Pacman state
-                pacman.setState(Pacman.State.INVISIBLE);
-
-                powerupTimer = 250;
-                break;
-
-            case NORMAL:
-                // Pacman state
-                pacman.setState(Pacman.State.NORMAL);
-
-                // Ghosts state
-                for (Ghost ghost : ghosts) ghost.setState(Ghost.State.NORMAL);
-                break;
-        }
+    public static void setPowerupState(State state) {
+        powerupState = state;
+        powerupTimer = state.getDuration();
     }
 
     /**
@@ -353,24 +351,29 @@ public class Game {
      Handles entity collisions between pacman and ghosts.
     */
     private static void handleEntityCollisions() {
-        int pacmanX = Math.floorDiv(pacman.getX(), ELEMENT_SIZE);
-        int pacmanY = Math.floorDiv(pacman.getY(), ELEMENT_SIZE);
+        int pacmanX1 = pacman.getX();
+        int pacmanX2 = pacmanX1 + ELEMENT_SIZE;
+        int pacmanY1 = pacman.getY();
+        int pacmanY2 = pacmanY1 + ELEMENT_SIZE;
 
         for (Ghost ghost: ghosts) {
-            int ghostX = Math.floorDiv(ghost.getX(), ELEMENT_SIZE);
-            int ghostY = Math.floorDiv(ghost.getY(), ELEMENT_SIZE);
+            int ghostX1 = ghost.getX();
+            int ghostX2 = ghostX1 + ELEMENT_SIZE;
+            int ghostY1 = ghost.getY();
+            int ghostY2 = ghostY1 + ELEMENT_SIZE;
 
-            if (ghostX == pacmanX && ghostY == pacmanY) {
-                switch (pacman.getState()) {
-                    case SUPER:
+            if (pacmanX1 < ghostX2 && pacmanX2 > ghostX1 && pacmanY1 < ghostY2 && pacmanY2 > ghostY1) {
+                switch (powerupState.getInteractionType()) {
+                    case GHOST_DEATH:
                         ghost.teleport(180, 180);
                         break;
 
-                    case NORMAL:
+                    case PACMAN_DEATH:
                         consumeLife();
                         break;
                 }
             }
         }
     }
+
 }

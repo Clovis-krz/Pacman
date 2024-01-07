@@ -4,6 +4,7 @@ import java.awt.*;
 import com.pacman.Game;
 import com.pacman.Main;
 import com.pacman.entities.Pacman;
+import com.pacman.powerups.InvisibleState;
 import com.pacman.renderers.PacballRenderer;
 
 public class PurplePacball extends AbstractPacball {
@@ -20,13 +21,13 @@ public class PurplePacball extends AbstractPacball {
 
     @Override
     public void onPacmanInterract() {
-        // Set Pacman state to invisible
-        Game.setPowerupState(Pacman.State.INVISIBLE);
-
-        // Increase Points
+        // Increase score
         Game.addPoints(300);
 
-        //Remove Pacball
+        // Set powerup state to invisible
+        Game.setPowerupState(new InvisibleState());
+
+        // Remove pacball
         Game.consumePacball(this.x, this.y);
     }
 

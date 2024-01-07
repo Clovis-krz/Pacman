@@ -4,6 +4,7 @@ import java.awt.*;
 import com.pacman.Game;
 import com.pacman.Main;
 import com.pacman.entities.Pacman;
+import com.pacman.powerups.SuperState;
 import com.pacman.renderers.PacballRenderer;
 
 public class OrangePacball extends AbstractPacball {
@@ -20,12 +21,13 @@ public class OrangePacball extends AbstractPacball {
 
     @Override
     public void onPacmanInterract() {
-        //Increase Points
+        // Increase score
         Game.addPoints(500);
 
-        Game.setPowerupState(Pacman.State.SUPER);
+        // Set powerup state to superpacman
+        Game.setPowerupState(new SuperState());
 
-        //Remove Pacball
+        // Remove pacball
         Game.consumePacball(this.x, this.y);
     }
 

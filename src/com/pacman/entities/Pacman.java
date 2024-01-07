@@ -7,13 +7,6 @@ import com.pacman.tiles.Tile;
 
 
 public class Pacman implements Entity {
-	public enum State {
-		NORMAL,
-		INVISIBLE,
-		SUPER
-	}
-
-	private State state = State.NORMAL;
 	private Direction direction = Direction.RIGHT;
 
 	private final PacmanRenderer renderer;
@@ -46,14 +39,6 @@ public class Pacman implements Entity {
 	@Override
 	public void setDirection(Direction direction) {
 		this.direction = direction;
-	}
-
-	public State getState() {
-		return this.state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
 	}
 
 	@Override
@@ -191,12 +176,6 @@ public class Pacman implements Entity {
 
 		tile.onPacmanInterract();
 	}
-	
-	@Override
-	public void draw() {
-		renderer.repaint();
-	}
-
 
 	@Override
 	public boolean teleport(int x, int y) {
@@ -206,10 +185,5 @@ public class Pacman implements Entity {
 		this.y = y;
 
 		return true;
-	}
-
-	@Override
-	public void delete() {
-		Main.removeRenderer(this.renderer);
 	}
 }

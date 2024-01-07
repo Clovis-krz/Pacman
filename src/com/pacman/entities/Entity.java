@@ -13,11 +13,7 @@ public interface Entity {
 
 	void move();
 
-	void draw();
-
 	boolean teleport(int x, int y);
-
-	void delete();
 
 	enum Direction {
 		UP,
