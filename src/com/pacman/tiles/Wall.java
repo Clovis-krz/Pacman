@@ -21,7 +21,11 @@ public class Wall implements Tile {
         this.y = y;
         this.wallcolor = wall_color;
         this.renderer = new TileRenderer(this);
-        Main.addRenderer(renderer);
+    }
+
+    @Override
+    public Type getType() {
+        return Type.NORMAL;
     }
 
     @Override
@@ -45,11 +49,6 @@ public class Wall implements Tile {
     @Override
     public int getY() {
 	    return this.y;
-    }
-
-    @Override
-    public void draw() {
-        renderer.repaint();
     }
 
     @Override

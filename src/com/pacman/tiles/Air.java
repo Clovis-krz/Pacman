@@ -13,6 +13,11 @@ public class Air implements Tile {
     }
 
     @Override
+    public Type getType() {
+        return Type.NORMAL;
+    }
+
+    @Override
     public boolean isSolidForPacman() {
         return false;
     }
@@ -34,9 +39,6 @@ public class Air implements Tile {
     public int getY() {
 	    return this.y;
     }
-
-    @Override
-    public void draw() {}
 
     @Override
     public Color getColor() {

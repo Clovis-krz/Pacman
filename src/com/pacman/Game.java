@@ -24,7 +24,9 @@ public class Game {
     private static int lives; // Amount of lives that currently pacman has
     private static long nextLifeGoal; // The next score value required to gain a new life.
     private static long score; // Current plauer score
+
     private static int remainingPacballs; // Amount of pacballs remaining before the player wins
+    private static int remainingSpecialPacballs; // Amount of superpacballs remaining before the player wins
 
     private static boolean shouldRestart; // Set to true to make the game restart, used for thread safety to stay on the main thread.
 
@@ -59,13 +61,11 @@ public class Game {
         powerupState = new NormalState();
         powerupTimer = 0;
 
-        // Initialises the maze
-        board = new Tile[400];
-        remainingPacballs = regenerateMaze();
+        remainingPacballs = 0;
+        remainingSpecialPacballs = 0;
 
         // Initialises pacman
         pacman = new Pacman(180, 100);
-        consumePacball(9, 5);
 
         // Initialises the ghost
         ghosts = new ArrayList<>();
@@ -73,6 +73,13 @@ public class Game {
         ghosts.add(new Ghost(200, 180));
         ghosts.add(new Ghost(200, 200));
         ghosts.add(new Ghost(180, 200));
+
+        // Initialises the maze
+        board = new Tile[400];
+        regenerateMaze();
+
+        // Eats the pacball at pacman's position
+        consumePacball(9, 5);
 
         // Creates the GUI
         guiRenderer = new GuiRenderer();
@@ -86,7 +93,7 @@ public class Game {
     */
     private static void loop() throws InterruptedException {
         // While there's still some pacballs remaining and the player isn't dead yet and the game wasn't set to restart.
-        while (remainingPacballs > 0 && lives > 0 && !shouldRestart) {
+        while ((remainingPacballs > 0 || remainingSpecialPacballs > 0) && lives > 0 && !shouldRestart) {
             // Entity movement
             pacman.move();
             for (Ghost ghost : ghosts) ghost.move();
@@ -127,12 +134,20 @@ public class Game {
 
     /**
      Generates a new maze layout and applies it to the game board.
-     Returns a pacball count to detect when the player won.
-
-     @return The amount of pacballs currently in the maze.
+     Assigns the remainingPacballs value to the amount of pacballs in the maze.
     */
-    public static int regenerateMaze() {
-        return MazeGenerator.generateBoard(board);
+    public static void regenerateMaze() {
+        for (Tile tile : board) {
+            if (tile != null) tile.delete();
+        }
+
+        resetEntityPositions();
+        int[] pacballCounts;
+        if (remainingPacballs == 0 && remainingSpecialPacballs == 0) pacballCounts = MazeGenerator.generateBoard(board);
+        else pacballCounts = MazeGenerator.generateBoard(board, remainingPacballs, remainingSpecialPacballs);
+
+        remainingPacballs = pacballCounts[0];
+        remainingSpecialPacballs = pacballCounts[1];
     }
 
     /**
@@ -293,7 +308,7 @@ public class Game {
             if (y == 0) targetY = GRID_HEIGHT - 1;
 
             // Finds the closest matching exit possible.
-            for (int i = 0; i <= GRID_WIDTH; i += 1) {
+            for (int i = 0; i < GRID_WIDTH; i += 1) {
                 Tile tile = getTileAtCoords(i, targetY);
 
                 // Ignores possible invalid tiles
@@ -306,7 +321,7 @@ public class Game {
                 }
 
                 // We've reached the corresponding exit already, no need to go further.
-                if (i == entranceNumber) break;
+                if (count == entranceNumber) break;
             }
 
             // Returns the coordinates of the exit.
@@ -338,13 +353,14 @@ public class Game {
         int index = y * GRID_WIDTH + x;
 
         Tile tile = getTileAtCoords(x, y);
-        if (tile == null) return;
+        if (tile == null || (tile.getType() != Tile.Type.PACBALL && tile.getType() != Tile.Type.SUPERPACBALL)) return;
 
         tile.delete();
 
         board[index] = new Air(x, y);
 
-        remainingPacballs -= 1;
+        if (tile.getType() == Tile.Type.PACBALL) remainingPacballs -= 1;
+        else if (tile.getType() == Tile.Type.SUPERPACBALL) remainingSpecialPacballs -= 1;
     }
 
     /**

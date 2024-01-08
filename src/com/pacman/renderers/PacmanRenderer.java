@@ -2,6 +2,7 @@ package com.pacman.renderers;
 
 import java.awt.*;
 import com.pacman.Game;
+import com.pacman.Main;
 import com.pacman.entities.Pacman;
 import javax.swing.*;
 
@@ -14,6 +15,7 @@ public class PacmanRenderer extends JComponent {
 	public PacmanRenderer(Pacman pacman) {
 		this.element = pacman;
 		this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT + GuiRenderer.GUI_SIZE);
+		Main.addRenderer(this);
 	}
 
 	@Override
