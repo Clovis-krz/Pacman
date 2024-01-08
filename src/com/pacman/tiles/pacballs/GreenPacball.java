@@ -14,7 +14,6 @@ public class GreenPacball extends AbstractPacball {
         this.x = x;
         this.y = y;
         this.renderer = new PacballRenderer(this);
-        Main.addRenderer(renderer);
     }
 
     @Override
@@ -22,7 +21,8 @@ public class GreenPacball extends AbstractPacball {
         //Increase Points
         Game.addPoints(1000);
 
-        // TODO: change labyrinth structure
+        // Regens maze
+        Game.regenerateMaze();
 
         //Remove Pacball
         Game.consumePacball(this.x, this.y);
@@ -36,11 +36,6 @@ public class GreenPacball extends AbstractPacball {
     @Override
     public int getY() {
 	    return this.y;
-    }
-
-    @Override
-    public void draw() {
-        renderer.repaint();
     }
 
     @Override

@@ -5,6 +5,11 @@ import com.pacman.tiles.Tile;
 
 public abstract class AbstractPacball implements Tile {
 	@Override
+	public Type getType() {
+		return Type.SUPERPACBALL;
+	}
+
+	@Override
 	public boolean isSolidForPacman() {
 		return false;
 	}
@@ -14,5 +19,8 @@ public abstract class AbstractPacball implements Tile {
 		return false;
 	}
 
+	/**
+	 @return Radius of the pacball, in pixels.
+	*/
 	public abstract int getRadius();
 }

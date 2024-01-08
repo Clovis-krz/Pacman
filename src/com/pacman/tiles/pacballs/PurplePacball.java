@@ -16,7 +16,6 @@ public class PurplePacball extends AbstractPacball {
         this.x = x;
         this.y = y;
         this.renderer = new PacballRenderer(this);
-        Main.addRenderer(renderer);
     }
 
     @Override
@@ -39,11 +38,6 @@ public class PurplePacball extends AbstractPacball {
     @Override
     public int getY() {
 	    return this.y;
-    }
-
-    @Override
-    public void draw() {
-        renderer.repaint();
     }
 
     @Override

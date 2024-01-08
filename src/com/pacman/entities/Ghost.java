@@ -20,46 +20,28 @@ public class Ghost implements Entity {
 
 		// Observer of the ghost, used to render it.
 		GhostRenderer renderer = new GhostRenderer(this);
-		Main.addRenderer(renderer);
 	}
 
-	/**
-	 @return The X position of the ghost, in pixels
-	*/
 	@Override
 	public int getX() {
 		return this.x;
 	}
 
-	/**
-	 @return The Y position of the ghost, in pixels
-	*/
 	@Override
 	public int getY() {
 		return this.y;
 	}
 
-	/**
-	 @return The direction in which the ghost is moving
-	*/
 	@Override
 	public Direction getDirection() {
 		return this.direction;
 	}
 
-	/**
-	 Changes the direction in which the ghost is moving
-
-	 @param direction The new direction the ghost should use
-	*/
 	@Override
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
-	/**
-	 Handles the ghost's movement mechanics
-	*/
 	@Override
 	public void move() {
 		// Sets the current ghost speed
@@ -173,13 +155,6 @@ public class Ghost implements Entity {
 		this.y = destination[1] * Game.ELEMENT_SIZE;
 	}
 
-	/**
-	 Used to teleport the ghost to a specific set of coordinates
-
-	 @param x X coordinate of the target position
-	 @param y Y coordinate of the target position
-	 @return
-	*/
 	@Override
 	public boolean teleport(int x, int y) {
 		if (x < 0 || x >= Game.GRID_WIDTH * Game.ELEMENT_SIZE || y < 0 || y >= Game.GRID_HEIGHT * Game.ELEMENT_SIZE) return false;

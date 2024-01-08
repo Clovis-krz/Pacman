@@ -2,21 +2,24 @@ package com.pacman.entities;
 
 import com.pacman.Game;
 import com.pacman.Main;
+import com.pacman.renderers.GhostRenderer;
 import com.pacman.renderers.PacmanRenderer;
 import com.pacman.tiles.Tile;
 
 
 public class Pacman implements Entity {
+	// Current direction in which pacman is moving
 	private Direction direction = Direction.RIGHT;
 
-	private final PacmanRenderer renderer;
+	// Position of the entity, in pixels
 	private int x, y;
 
 	public Pacman(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.renderer = new PacmanRenderer(this);
-		Main.addRenderer(renderer);
+
+		// Observer of pacman, used to render it.
+		PacmanRenderer renderer = new PacmanRenderer(this);
 	}
 
 	private static final int SPEED_MULTIPLIER = 2;
@@ -161,7 +164,12 @@ public class Pacman implements Entity {
 		if (secondaryTile != null) secondaryTile.onPacmanInterract();
 	}
 
+	/**
+	 Handles how pacman should behave when going through a warparound tunnel.
 
+	 @param x X position of the current tile of pacman
+	 @param y Y position of the current tile of pacman
+	*/
 	public void wraparound(int x, int y) {
 		int[] destination = Game.getWrapAroundCoordinates(x, y, true);
 

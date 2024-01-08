@@ -6,7 +6,7 @@ import com.pacman.Main;
 import com.pacman.renderers.TileRenderer;
 
 
-public class PacmanWall implements Tile{
+public class PacmanWall implements Tile {
     private final int x;
     private final int y;
     private final TileRenderer renderer;
@@ -15,7 +15,11 @@ public class PacmanWall implements Tile{
         this.x = x;
         this.y = y;
         this.renderer = new TileRenderer(this);
-        Main.addRenderer(renderer);
+    }
+
+    @Override
+    public Type getType() {
+        return Type.NORMAL;
     }
 
     @Override
@@ -39,11 +43,6 @@ public class PacmanWall implements Tile{
     @Override
     public int getY() {
 	    return this.y;
-    }
-
-    @Override
-    public void draw() {
-        renderer.repaint();
     }
 
     @Override

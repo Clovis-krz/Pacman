@@ -2,6 +2,7 @@ package com.pacman.renderers;
 
 import java.awt.*;
 import com.pacman.Game;
+import com.pacman.Main;
 import com.pacman.tiles.Tile;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ public class TileRenderer extends JComponent {
     public TileRenderer(Tile element) {
         this.element = element;
         this.setSize(Game.ELEMENT_SIZE * Game.GRID_WIDTH, Game.ELEMENT_SIZE * Game.GRID_HEIGHT + GuiRenderer.GUI_SIZE);
+        Main.addRenderer(this);
     }
 
     @Override
